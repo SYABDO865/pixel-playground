@@ -1,0 +1,2716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pixel Playground</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Outfit:wght@400;600;800&family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #e6efff;
+  --surface: #ffffff;
+  --surface-2: #f1f5ff;
+  --line: #1a1740;
+  --text: #1a1740;
+  --muted: #55568a;
+  --lime: #b6f23a;
+  --pink: #ff4fa3;
+  --cyan: #35d0ff;
+  --sun: #ffd23f;
+  --danger: #ff4a4a;
+  --shadow: #1a1740;
+  --on-accent: #1a1740;
+  color-scheme: light;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #14122e;
+    --surface: #221f4d;
+    --surface-2: #2c2862;
+    --line: #f3f0ff;
+    --text: #f3f0ff;
+    --muted: #b3b0e0;
+    --shadow: #05040f;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #14122e;
+  --surface: #221f4d;
+  --surface-2: #2c2862;
+  --line: #f3f0ff;
+  --text: #f3f0ff;
+  --muted: #b3b0e0;
+  --shadow: #05040f;
+  color-scheme: dark;
+}
+html {
+  scroll-padding-top: env(safe-area-inset-top, 0px);
+  scroll-behavior: smooth;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Outfit", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+h1, h2, h3 {
+  font-family: "Bungee", "Impact", "Arial Black", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  margin: 0;
+  line-height: 1.1;
+}
+h2 {
+  font-size: 1.6rem;
+}
+h3 {
+  font-size: 1.1rem;
+}
+p {
+  margin: 0 0 0.6rem;
+}
+.app {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+.top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.logo {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  font-size: 1.8rem;
+  background: var(--lime);
+  border: 3px solid var(--line);
+  border-radius: 14px;
+  box-shadow: 4px 4px 0 var(--shadow);
+  transform: rotate(-6deg);
+}
+.brand h1 {
+  font-size: 1.7rem;
+}
+.brand p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+.hud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.chip {
+  background: var(--surface);
+  border: 3px solid var(--line);
+  border-radius: 999px;
+  padding: 0.2rem 0.8rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.chip b {
+  font-family: "Bungee", "Impact", sans-serif;
+  font-weight: 400;
+  margin-inline-start: 0.3rem;
+}
+.xpbar {
+  height: 14px;
+  background: var(--surface);
+  border: 3px solid var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+.xpfill {
+  height: 100%;
+  width: 0%;
+  background: var(--pink);
+  transition: width 0.4s ease;
+}
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+button {
+  font: inherit;
+  color: var(--on-accent);
+  cursor: pointer;
+}
+.btn {
+  background: var(--sun);
+  border: 3px solid var(--line);
+  border-radius: 12px;
+  padding: 0.5rem 1rem;
+  font-weight: 800;
+  box-shadow: 4px 4px 0 var(--shadow);
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+.btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0 var(--shadow);
+}
+.btn:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0 0 0 var(--shadow);
+}
+.btn:focus-visible,
+.cell:focus-visible,
+.mcard:focus-visible,
+input:focus-visible {
+  outline: 3px dashed var(--pink);
+  outline-offset: 3px;
+}
+.btn.pink {
+  background: var(--pink);
+}
+.btn.cyan {
+  background: var(--cyan);
+}
+.btn.lime {
+  background: var(--lime);
+}
+.btn.ghost {
+  background: var(--surface);
+  color: var(--text);
+}
+.btn.small {
+  padding: 0.25rem 0.7rem;
+  font-size: 0.85rem;
+  box-shadow: 3px 3px 0 var(--shadow);
+}
+.btn.big {
+  font-family: "Bungee", "Impact", sans-serif;
+  font-weight: 400;
+  font-size: 1.4rem;
+  padding: 0.9rem 1.6rem;
+}
+.btn.on {
+  background: var(--lime);
+}
+.tab.current {
+  background: var(--lime);
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--shadow);
+}
+.view {
+  display: none;
+}
+.view.active {
+  display: block;
+  animation: pop 0.25s ease;
+}
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.panel {
+  background: var(--surface);
+  border: 3px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 6px 6px 0 var(--shadow);
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+.panel > h2 {
+  margin-bottom: 0.4rem;
+}
+.sub {
+  color: var(--muted);
+  margin-bottom: 0.9rem;
+}
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+}
+.row.center {
+  justify-content: center;
+}
+.grid {
+  display: grid;
+  gap: 1rem;
+}
+.grid.cols3 {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+.grid.cols2 {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+.hero {
+  background: var(--cyan);
+  color: var(--on-accent);
+  border: 3px solid var(--line);
+  border-radius: 22px;
+  box-shadow: 8px 8px 0 var(--shadow);
+  padding: 1.6rem;
+  margin-bottom: 1.5rem;
+}
+.hero h2 {
+  font-size: clamp(1.8rem, 6vw, 3.2rem);
+  margin-bottom: 0.5rem;
+}
+.hero p {
+  max-width: 52ch;
+  font-size: 1.05rem;
+}
+.gamecard {
+  background: var(--surface);
+  border: 3px solid var(--line);
+  border-radius: 16px;
+  box-shadow: 5px 5px 0 var(--shadow);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.gamecard .ico {
+  font-size: 2.2rem;
+}
+.gamecard p {
+  color: var(--muted);
+  flex: 1;
+}
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  width: min(100%, 330px);
+  margin: 0.8rem auto;
+}
+.cell {
+  aspect-ratio: 1;
+  font-family: "Bungee", "Impact", sans-serif;
+  font-size: 2.6rem;
+  background: var(--surface-2);
+  color: var(--text);
+  border: 3px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 3px 3px 0 var(--shadow);
+}
+.cell:hover:not(:disabled) {
+  background: var(--sun);
+  color: var(--on-accent);
+}
+.cell.x {
+  color: var(--pink);
+}
+.cell.o {
+  color: var(--cyan);
+}
+.cell.win {
+  background: var(--lime);
+  color: var(--on-accent);
+}
+.status {
+  text-align: center;
+  font-weight: 800;
+  min-height: 1.6em;
+}
+.scoreline {
+  display: flex;
+  justify-content: center;
+  gap: 1.2rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+.scoreline b {
+  color: var(--text);
+}
+.memgrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  width: min(100%, 380px);
+  margin: 0.8rem auto;
+}
+.mcard {
+  aspect-ratio: 1;
+  font-size: 2rem;
+  background: var(--pink);
+  border: 3px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 3px 3px 0 var(--shadow);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.mcard.up {
+  background: var(--surface-2);
+  transform: rotateY(180deg) rotateY(180deg);
+}
+.mcard.done {
+  background: var(--lime);
+}
+.frenzy {
+  text-align: center;
+  padding: 1rem 0;
+}
+.frenzy .count {
+  font-family: "Bungee", "Impact", sans-serif;
+  font-size: 4rem;
+  line-height: 1;
+}
+.meter {
+  height: 16px;
+  background: var(--surface-2);
+  border: 3px solid var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 0.8rem auto;
+  max-width: 420px;
+}
+.meter div {
+  height: 100%;
+  width: 100%;
+  background: var(--cyan);
+  transition: width 0.1s linear;
+}
+.display {
+  font-family: "Bungee", "Impact", sans-serif;
+  font-size: 2.2rem;
+  text-align: center;
+  background: var(--surface-2);
+  border: 3px solid var(--line);
+  border-radius: 12px;
+  padding: 0.4rem;
+  min-height: 3.4rem;
+  max-width: 260px;
+  margin: 0.6rem auto;
+}
+.pad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  max-width: 260px;
+  margin: 0.6rem auto;
+}
+.hint {
+  text-align: center;
+  font-weight: 600;
+  min-height: 1.6em;
+}
+.rpsrow {
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  margin: 1rem 0;
+}
+.rpsbtn {
+  font-size: 2.4rem;
+  padding: 0.6rem 1.1rem;
+}
+.arena {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  font-size: 3.4rem;
+  min-height: 4.4rem;
+}
+.dicebox {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  font-size: 5rem;
+  line-height: 1;
+  margin: 0.8rem 0;
+}
+.die.roll {
+  animation: shake 0.4s ease;
+}
+@keyframes shake {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(-18deg) scale(1.1); }
+  50% { transform: rotate(14deg); }
+  75% { transform: rotate(-8deg) scale(1.05); }
+  100% { transform: rotate(0deg); }
+}
+.achgrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 0.7rem;
+}
+.ach {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  padding: 0.6rem;
+  border: 3px dashed var(--muted);
+  border-radius: 12px;
+  opacity: 0.6;
+}
+.ach.got {
+  border: 3px solid var(--line);
+  background: var(--lime);
+  color: var(--on-accent);
+  opacity: 1;
+}
+.ach .i {
+  font-size: 1.7rem;
+}
+.ach small {
+  display: block;
+  line-height: 1.2;
+}
+.feed {
+  background: var(--surface);
+  border: 3px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 6px 6px 0 var(--shadow);
+  padding: 1rem;
+  margin-bottom: 1.25rem;
+}
+.feedhead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.feedlist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 190px;
+  overflow-y: auto;
+  font-size: 0.92rem;
+}
+.feedlist li {
+  padding: 0.25rem 0;
+  border-bottom: 1px dashed var(--muted);
+}
+.feedlist li span {
+  color: var(--muted);
+  margin-inline-end: 0.5rem;
+  font-variant-numeric: tabular-nums;
+}
+.feedlist.collapsed {
+  display: none;
+}
+.toasts {
+  position: fixed;
+  right: 1rem;
+  bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 50;
+  max-width: min(340px, calc(100vw - 2rem));
+}
+.toast {
+  background: var(--sun);
+  color: var(--on-accent);
+  border: 3px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 4px 4px 0 var(--shadow);
+  padding: 0.5rem 0.8rem;
+  font-weight: 600;
+  animation: slide 0.25s ease;
+}
+.toast.good {
+  background: var(--lime);
+}
+.toast.bad {
+  background: var(--pink);
+}
+.toast.info {
+  background: var(--cyan);
+}
+@keyframes slide {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 8, 30, 0.6);
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  z-index: 60;
+}
+.modal[hidden] {
+  display: none;
+}
+.modalbox {
+  background: var(--surface);
+  border: 3px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 8px 8px 0 var(--shadow);
+  padding: 1.4rem;
+  max-width: 440px;
+  width: 100%;
+}
+.modalbox ul {
+  padding-left: 1.2rem;
+}
+.foot {
+  text-align: center;
+  color: var(--muted);
+  padding: 1rem 0 2rem;
+}
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.7);
+  pointer-events: none;
+  animation: rip 0.5s ease-out forwards;
+}
+@keyframes rip {
+  from {
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+  to {
+    width: 120px;
+    height: 120px;
+    opacity: 0;
+  }
+}
+button {
+  position: relative;
+  overflow: hidden;
+}
+input[type="text"] {
+  font: inherit;
+  padding: 0.4rem 0.6rem;
+  border: 3px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface-2);
+  color: var(--text);
+}
+.molegrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  width: min(100%, 330px);
+  margin: 0.8rem auto;
+}
+.molegrid.dense {
+  width: min(100%, 420px);
+  gap: 6px;
+}
+.molegrid.dense .hole {
+  font-size: 1.5rem;
+}
+.btn.hole {
+  aspect-ratio: 1;
+  font-size: 2.4rem;
+  background: var(--surface-2);
+  color: var(--text);
+  padding: 0;
+}
+.btn.hole.up {
+  background: var(--lime);
+  color: var(--on-accent);
+}
+.simon {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: min(100%, 300px);
+  margin: 0.8rem auto;
+}
+.simon button {
+  aspect-ratio: 1;
+  border: 3px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 4px 4px 0 var(--shadow);
+  opacity: 0.55;
+  transition: opacity 0.1s ease, transform 0.1s ease;
+}
+.simon button.lit {
+  opacity: 1;
+  transform: scale(1.06);
+}
+.s0 { background: var(--pink); }
+.s1 { background: var(--cyan); }
+.s2 { background: var(--sun); }
+.s3 { background: var(--lime); }
+.btn.reaction {
+  display: block;
+  width: 100%;
+  min-height: 200px;
+  margin: 0.8rem 0;
+  font-family: "Bungee", "Impact", sans-serif;
+  font-weight: 400;
+  font-size: 1.5rem;
+  background: var(--surface-2);
+  color: var(--text);
+}
+.btn.reaction.wait {
+  background: var(--danger);
+  color: #ffffff;
+}
+.btn.reaction.go {
+  background: var(--lime);
+  color: var(--on-accent);
+}
+.arena2 {
+  position: relative;
+  height: 260px;
+  background: var(--surface-2);
+  border: 3px solid var(--line);
+  border-radius: 14px;
+  margin: 0.8rem 0;
+  overflow: hidden;
+}
+.runbtn {
+  position: absolute;
+  left: 40%;
+  top: 40%;
+  transition: left 0.18s ease, top 0.18s ease;
+}
+.rock {
+  font-size: 5.5rem;
+  text-align: center;
+  line-height: 1.2;
+}
+.rock.wiggle {
+  animation: shake 0.4s ease;
+}
+.bar {
+  height: 16px;
+  background: var(--surface-2);
+  border: 3px solid var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 0.4rem auto;
+  max-width: 420px;
+}
+.bar div {
+  height: 100%;
+  width: 0;
+  background: var(--pink);
+  transition: width 0.25s ease;
+}
+.pizza {
+  font-size: 2.4rem;
+  text-align: center;
+  min-height: 3.6rem;
+  word-break: break-all;
+}
+.toppings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin: 0.6rem 0;
+}
+html[lang="ar"] body,
+html[lang="ar"] body * {
+  font-family: "Cairo", "Segoe UI", Tahoma, sans-serif !important;
+  letter-spacing: 0 !important;
+}
+.board, .memgrid, .molegrid, .pad, .simon, .dicebox, .arena, .toppings {
+  direction: ltr;
+}
+@media (max-width: 520px) {
+  .app {
+    padding: 0.7rem;
+  }
+  .brand h1 {
+    font-size: 1.3rem;
+  }
+  .dicebox {
+    font-size: 4rem;
+  }
+  .toasts {
+    left: 1rem;
+    right: 1rem;
+    max-width: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+</style>
+</head>
+<body>
+<div class="app" id="top">
+  <header class="top">
+    <div class="brand">
+      <div class="logo">🎮</div>
+      <div>
+        <h1>Pixel Playground</h1>
+        <p>Twelve mini games. Every button talks back.</p>
+      </div>
+    </div>
+    <div class="hud">
+      <button class="btn small cyan" id="btnLang" data-action="lang" data-notr>العربية</button>
+      <div class="chip">Level<b id="hudLevel">1</b></div>
+      <div class="chip">XP<b id="hudXp">0</b></div>
+      <div class="chip">Coins<b id="hudCoins">0</b></div>
+      <div class="chip">Clicks<b id="hudClicks">0</b></div>
+    </div>
+  </header>
+  <div class="xpbar" title="Progress to next level">
+    <div class="xpfill" id="xpFill"></div>
+  </div>
+
+  <nav class="tabs" aria-label="Games">
+    <button class="btn tab current" data-action="nav" data-view="home">Home</button>
+    <button class="btn tab" data-action="nav" data-view="ttt">Tic-tac-toe</button>
+    <button class="btn tab" data-action="nav" data-view="mem">Memory</button>
+    <button class="btn tab" data-action="nav" data-view="frenzy">Click frenzy</button>
+    <button class="btn tab" data-action="nav" data-view="guess">Number guess</button>
+    <button class="btn tab" data-action="nav" data-view="rps">Rock paper scissors</button>
+    <button class="btn tab" data-action="nav" data-view="dice">Lucky dice</button>
+    <button class="btn tab" data-action="nav" data-view="whack">Whack-a-mole</button>
+    <button class="btn tab" data-action="nav" data-view="simon">Simon says</button>
+    <button class="btn tab" data-action="nav" data-view="react">Reaction test</button>
+    <button class="btn tab" data-action="nav" data-view="runaway">Runaway button</button>
+    <button class="btn tab" data-action="nav" data-view="rock">Pet rock</button>
+    <button class="btn tab" data-action="nav" data-view="pizza">Cursed pizza</button>
+    <button class="btn tab" data-action="nav" data-view="settings">Settings</button>
+  </nav>
+
+  <main>
+    <section class="view active" id="view-home">
+      <div class="hero">
+        <h2>Press anything.<br>Something happens.</h2>
+        <p>Pick a game, earn XP and coins, and unlock badges. Not sure where to start? Let the arcade choose.</p>
+        <div class="row">
+          <button class="btn pink big" data-action="surprise">Surprise me</button>
+          <button class="btn ghost" data-action="fact">Gamer fact</button>
+          <button class="btn ghost" data-action="bonus">Claim daily bonus</button>
+        </div>
+      </div>
+
+      <div class="grid cols3">
+        <article class="gamecard">
+          <div class="ico">❌</div>
+          <h3>Tic-tac-toe</h3>
+          <p>Beat the bot on easy, or try to survive hard mode.</p>
+          <div class="row">
+            <button class="btn lime small" data-action="nav" data-view="ttt">Play</button>
+            <button class="btn ghost small" data-action="help" data-game="ttt">Rules</button>
+          </div>
+        </article>
+        <article class="gamecard">
+          <div class="ico">🧠</div>
+          <h3>Memory</h3>
+          <p>Match eight pairs in as few moves as you can.</p>
+          <div class="row">
+            <button class="btn lime small" data-action="nav" data-view="mem">Play</button>
+            <button class="btn ghost small" data-action="help" data-game="mem">Rules</button>
+          </div>
+        </article>
+        <article class="gamecard">
+          <div class="ico">⚡</div>
+          <h3>Click frenzy</h3>
+          <p>Ten seconds. How many clicks can you land?</p>
+          <div class="row">
+            <button class="btn lime small" data-action="nav" data-view="frenzy">Play</button>
+            <button class="btn ghost small" data-action="help" data-game="frenzy">Rules</button>
+          </div>
+        </article>
+        <article class="gamecard">
+          <div class="ico">🔢</div>
+          <h3>Number guess</h3>
+          <p>Find the secret number between 1 and 100.</p>
+          <div class="row">
+            <button class="btn lime small" data-action="nav" data-view="guess">Play</button>
+            <button class="btn ghost small" data-action="help" data-game="guess">Rules</button>
+          </div>
+        </article>
+        <article class="gamecard">
+          <div class="ico">✂️</div>
+          <h3>Rock paper scissors</h3>
+          <p>Classic duel. Chase a three win streak.</p>
+          <div class="row">
+            <button class="btn lime small" data-action="nav" data-view="rps">Play</button>
+            <button class="btn ghost small" data-action="help" data-game="rps">Rules</button>
+          </div>
+        </article>
+        <article class="gamecard">
+          <div class="ico">🎲</div>
+          <h3>Lucky dice</h3>
+          <p>Roll two dice and chase doubles for bonus coins.</p>
+          <div class="row">
+            <button class="btn lime small" data-action="nav" data-view="dice">Play</button>
+            <button class="btn ghost small" data-action="help" data-game="dice">Rules</button>
+          </div>
+        </article>
+      </div>
+
+      <div class="grid cols3" style="margin-top:1.25rem">
+        <article class="gamecard">
+          <div class="ico">🐹</div>
+          <h3>Whack-a-mole</h3>
+          <p>Hit every mole that pops up in 20 seconds.</p>
+          <div class="row">
+            <button class="btn lime small" data-action="nav" data-view="whack">Play</button>
+            <button class="btn ghost small" data-action="help" data-game="whack">Rules</button>
+          </div>
+        </article>
+        <article class="gamecard">
+          <div class="ico">🎵</div>
+          <h3>Simon says</h3>
+          <p>Watch the colors and repeat the growing sequence.</p>
+          <div class="row">
+            <button class="btn lime small" data-action="nav" data-view="simon">Play</button>
+            <button class="btn ghost small" data-action="help" data-game="simon">Rules</button>
+          </div>
+        </article>
+        <article class="gamecard">
+          <div class="ico">⏱️</div>
+          <h3>Reaction test</h3>
+          <p>Click the instant the box turns green.</p>
+          <div class="row">
+            <button class="btn lime small" data-action="nav" data-view="react">Play</button>
+            <button class="btn ghost small" data-action="help" data-game="react">Rules</button>
+          </div>
+        </article>
+      </div>
+
+      <div class="grid cols3" style="margin-top:1.25rem">
+        <article class="gamecard">
+          <div class="ico">🏃</div>
+          <h3>Runaway button</h3>
+          <p>A very dramatic button refuses to be clicked. Catch it anyway.</p>
+          <div class="row">
+            <button class="btn lime small" data-action="nav" data-view="runaway">Play</button>
+            <button class="btn ghost small" data-action="help" data-game="runaway">Rules</button>
+          </div>
+        </article>
+        <article class="gamecard">
+          <div class="ico">🪨</div>
+          <h3>Pet rock</h3>
+          <p>Adopt a rock. Pet it, sing to it, ignore it. It has opinions.</p>
+          <div class="row">
+            <button class="btn lime small" data-action="nav" data-view="rock">Play</button>
+            <button class="btn ghost small" data-action="help" data-game="rock">Rules</button>
+          </div>
+        </article>
+        <article class="gamecard">
+          <div class="ico">🍕</div>
+          <h3>Cursed pizza</h3>
+          <p>Pile on terrible toppings. Aim for perfectly cursed without exploding.</p>
+          <div class="row">
+            <button class="btn lime small" data-action="nav" data-view="pizza">Play</button>
+            <button class="btn ghost small" data-action="help" data-game="pizza">Rules</button>
+          </div>
+        </article>
+      </div>
+
+      <div class="panel" style="margin-top:1.25rem">
+        <h2>Badges</h2>
+        <p class="sub" id="achCount">0 of 0 unlocked</p>
+        <div class="achgrid" id="achGrid"></div>
+      </div>
+    </section>
+
+    <section class="view" id="view-ttt">
+      <div class="panel">
+        <h2>Tic-tac-toe</h2>
+        <p class="sub">You are X. The bot is O.</p>
+        <div class="row center">
+          <button class="btn small on" id="btnEasy" data-action="ttt-easy">Easy bot</button>
+          <button class="btn small" id="btnHard" data-action="ttt-hard">Hard bot</button>
+          <button class="btn small pink" data-action="ttt-new">New round</button>
+          <button class="btn small ghost" data-action="help" data-game="ttt">Rules</button>
+        </div>
+        <div class="board" id="tttBoard"></div>
+        <div class="status" id="tttStatus">Your move.</div>
+        <div class="scoreline">
+          <span>Wins <b id="tttW">0</b></span>
+          <span>Draws <b id="tttD">0</b></span>
+          <span>Losses <b id="tttL">0</b></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" id="view-mem">
+      <div class="panel">
+        <h2>Memory</h2>
+        <p class="sub">Flip two cards. Matching pairs stay open.</p>
+        <div class="row center">
+          <button class="btn small pink" data-action="mem-new">Shuffle</button>
+          <button class="btn small cyan" data-action="mem-peek">Peek (3 coins)</button>
+          <button class="btn small ghost" data-action="help" data-game="mem">Rules</button>
+        </div>
+        <div class="memgrid" id="memGrid"></div>
+        <div class="scoreline">
+          <span>Moves <b id="memMoves">0</b></span>
+          <span>Pairs <b id="memPairs">0</b>/8</span>
+          <span>Best <b id="memBest">-</b></span>
+        </div>
+        <div class="status" id="memStatus"></div>
+      </div>
+    </section>
+
+    <section class="view" id="view-frenzy">
+      <div class="panel">
+        <h2>Click frenzy</h2>
+        <p class="sub">Press start, then click as fast as you can for ten seconds.</p>
+        <div class="frenzy">
+          <div class="count" id="frCount">0</div>
+          <div class="meter"><div id="frMeter"></div></div>
+          <div class="status" id="frStatus">Ready when you are.</div>
+          <div class="row center">
+            <button class="btn lime" data-action="fr-start">Start</button>
+            <button class="btn pink big" data-action="fr-click">CLICK!</button>
+            <button class="btn ghost" data-action="fr-reset">Reset</button>
+          </div>
+        </div>
+        <div class="scoreline">
+          <span>Best <b id="frBest">0</b></span>
+          <span>Runs <b id="frRuns">0</b></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" id="view-guess">
+      <div class="panel">
+        <h2>Number guess</h2>
+        <p class="sub">I picked a number from 1 to 100. Use the pad, then press Guess.</p>
+        <div class="display" id="gsDisplay">_</div>
+        <div class="pad" id="gsPad">
+          <button class="btn" data-action="gs-pad" data-key="1">1</button>
+          <button class="btn" data-action="gs-pad" data-key="2">2</button>
+          <button class="btn" data-action="gs-pad" data-key="3">3</button>
+          <button class="btn" data-action="gs-pad" data-key="4">4</button>
+          <button class="btn" data-action="gs-pad" data-key="5">5</button>
+          <button class="btn" data-action="gs-pad" data-key="6">6</button>
+          <button class="btn" data-action="gs-pad" data-key="7">7</button>
+          <button class="btn" data-action="gs-pad" data-key="8">8</button>
+          <button class="btn" data-action="gs-pad" data-key="9">9</button>
+          <button class="btn ghost" data-action="gs-pad" data-key="clear">Clear</button>
+          <button class="btn" data-action="gs-pad" data-key="0">0</button>
+          <button class="btn ghost" data-action="gs-pad" data-key="back">Undo</button>
+        </div>
+        <div class="row center">
+          <button class="btn lime" data-action="gs-guess">Guess</button>
+          <button class="btn cyan" data-action="gs-hint">Hint (2 coins)</button>
+          <button class="btn pink" data-action="gs-new">New number</button>
+        </div>
+        <div class="hint" id="gsHint">Waiting for your first guess.</div>
+        <div class="scoreline">
+          <span>Tries <b id="gsTries">0</b></span>
+          <span>Best <b id="gsBest">-</b></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" id="view-rps">
+      <div class="panel">
+        <h2>Rock paper scissors</h2>
+        <p class="sub">Choose your weapon. Three wins in a row unlocks a badge.</p>
+        <div class="arena">
+          <span id="rpsYou">❔</span>
+          <span>vs</span>
+          <span id="rpsBot">❔</span>
+        </div>
+        <div class="rpsrow">
+          <button class="btn rpsbtn" data-action="rps-pick" data-pick="rock">🪨</button>
+          <button class="btn rpsbtn cyan" data-action="rps-pick" data-pick="paper">📄</button>
+          <button class="btn rpsbtn pink" data-action="rps-pick" data-pick="scissors">✂️</button>
+        </div>
+        <div class="status" id="rpsStatus">Make your pick.</div>
+        <div class="scoreline">
+          <span>Wins <b id="rpsW">0</b></span>
+          <span>Ties <b id="rpsT">0</b></span>
+          <span>Losses <b id="rpsL">0</b></span>
+          <span>Streak <b id="rpsS">0</b></span>
+        </div>
+        <div class="row center" style="margin-top:0.8rem">
+          <button class="btn small ghost" data-action="rps-reset">Reset score</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" id="view-dice">
+      <div class="panel">
+        <h2>Lucky dice</h2>
+        <p class="sub">Doubles pay coins. A snake eyes roll pays big.</p>
+        <div class="dicebox">
+          <span class="die" id="die1">⚀</span>
+          <span class="die" id="die2">⚀</span>
+        </div>
+        <div class="status" id="diceStatus">Roll to begin.</div>
+        <div class="row center" style="margin-top:0.8rem">
+          <button class="btn lime big" data-action="dice-roll">Roll</button>
+          <button class="btn ghost" data-action="dice-reset">Reset</button>
+        </div>
+        <div class="scoreline" style="margin-top:0.8rem">
+          <span>Rolls <b id="diceRolls">0</b></span>
+          <span>Doubles <b id="diceDoubles">0</b></span>
+          <span>Biggest <b id="diceMax">0</b></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" id="view-whack">
+      <div class="panel">
+        <h2>Whack-a-mole</h2>
+        <p class="sub">Moles pop up for a split second. Hit them fast.</p>
+        <div class="row center">
+          <button class="btn lime" data-action="wh-start">Start</button>
+          <button class="btn ghost small" data-action="help" data-game="whack">Rules</button>
+        </div>
+        <div class="row center" id="whLevels"></div>
+        <div class="status" id="whInfo"></div>
+        <div class="molegrid" id="whGrid"></div>
+        <div class="scoreline">
+          <span>Score <b id="whScore">0</b></span>
+          <span>Time <b id="whTime">20</b></span>
+          <span>Best <b id="whBest">0</b></span>
+        </div>
+        <div class="status" id="whStatus">Press Start.</div>
+      </div>
+    </section>
+
+    <section class="view" id="view-simon">
+      <div class="panel">
+        <h2>Simon says</h2>
+        <p class="sub">Repeat the pattern. It gets one step longer each round.</p>
+        <div class="row center">
+          <button class="btn lime" data-action="si-start">Start</button>
+          <button class="btn ghost small" data-action="help" data-game="simon">Rules</button>
+        </div>
+        <div class="row center" id="siLevels"></div>
+        <div class="status" id="siInfo"></div>
+        <div class="simon" id="siPads"></div>
+        <div class="status" id="siStatus">Press Start.</div>
+        <div class="scoreline">
+          <span>Round <b id="siRound">0</b></span>
+          <span>Best <b id="siBest">0</b></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" id="view-react">
+      <div class="panel">
+        <h2>Reaction test</h2>
+        <p class="sub">Click the box to arm it. When it turns green, click again as fast as you can.</p>
+        <button class="btn reaction" id="reArea" data-action="re-area">Click to start</button>
+        <div class="scoreline">
+          <span>Last <b id="reLast">-</b></span>
+          <span>Best <b id="reBest">-</b></span>
+        </div>
+        <div class="row center" style="margin-top:0.8rem">
+          <button class="btn small ghost" data-action="help" data-game="react">Rules</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" id="view-runaway">
+      <div class="panel">
+        <h2>Runaway button</h2>
+        <p class="sub">This button has trust issues. Catch it before 15 seconds run out.</p>
+        <div class="row center">
+          <button class="btn lime" data-action="rb-start">Start</button>
+          <button class="btn ghost small" data-action="help" data-game="runaway">Rules</button>
+        </div>
+        <div class="arena2" id="rbArena">
+          <button class="btn pink runbtn" id="rbBtn" data-action="rb-catch">Catch me</button>
+        </div>
+        <div class="scoreline">
+          <span>Caught <b id="rbScore">0</b></span>
+          <span>Time <b id="rbTime">15</b></span>
+          <span>Best <b id="rbBest">0</b></span>
+        </div>
+        <div class="status" id="rbStatus">Press Start, if you dare.</div>
+      </div>
+    </section>
+
+    <section class="view" id="view-rock">
+      <div class="panel">
+        <h2>Pet rock</h2>
+        <p class="sub">Meet Rocky. Keep him happy. Nobody can tell if it works.</p>
+        <div class="rock" id="rockFace">🪨</div>
+        <div class="bar"><div id="rockBar"></div></div>
+        <div class="status" id="rockMood"></div>
+        <div class="row center">
+          <button class="btn lime" data-action="rock-act" data-k="pet">Pet</button>
+          <button class="btn cyan" data-action="rock-act" data-k="feed">Feed a pebble</button>
+          <button class="btn" data-action="rock-act" data-k="walk">Go for a walk</button>
+          <button class="btn pink" data-action="rock-act" data-k="sing">Sing</button>
+          <button class="btn ghost" data-action="rock-act" data-k="hat">Tiny hat</button>
+          <button class="btn ghost" data-action="rock-act" data-k="ignore">Ignore</button>
+        </div>
+        <div class="scoreline" style="margin-top:0.8rem">
+          <span>Moments shared <b id="rockCount">0</b></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" id="view-pizza">
+      <div class="panel">
+        <h2>Cursed pizza</h2>
+        <p class="sub">Reach 70 to 100 chaos for a perfectly cursed pizza. Go past 100 and it explodes.</p>
+        <div class="pizza" id="pzPie">🍕</div>
+        <div class="bar"><div id="pzBar"></div></div>
+        <div class="status" id="pzStatus">Chaos 0. Add a topping.</div>
+        <div class="toppings" id="pzTops"></div>
+        <div class="row center">
+          <button class="btn lime" data-action="pz-serve">Serve it</button>
+          <button class="btn pink" data-action="pz-new">New pizza</button>
+          <button class="btn ghost small" data-action="help" data-game="pizza">Rules</button>
+        </div>
+        <div class="scoreline" style="margin-top:0.8rem">
+          <span>Cursed pizzas served <b id="pzWins">0</b></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" id="view-settings">
+      <div class="panel">
+        <h2>Settings</h2>
+        <p class="sub">Tune the arcade to your taste.</p>
+        <div class="row">
+          <button class="btn on" id="btnSound" data-action="set-sound">Sound: on</button>
+          <button class="btn cyan" data-action="set-theme">Switch theme</button>
+          <button class="btn ghost" data-action="copy-score">Copy my stats</button>
+          <button class="btn pink" data-action="set-reset">Erase all progress</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <aside class="feed">
+    <div class="feedhead">
+      <h3>Click feed</h3>
+      <div class="row">
+        <button class="btn small ghost" data-action="feed-toggle">Hide</button>
+        <button class="btn small ghost" data-action="feed-clear">Clear</button>
+      </div>
+    </div>
+    <ul class="feedlist" id="feedList"></ul>
+  </aside>
+
+  <footer class="foot">
+    <button class="btn small ghost" data-action="top">Back to top</button>
+    <p>Pixel Playground keeps your progress in this browser only.</p>
+  </footer>
+</div>
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<div class="modal" id="modal" hidden>
+  <div class="modalbox">
+    <h2 id="modalTitle">Rules</h2>
+    <div id="modalBody"></div>
+    <button class="btn lime" data-action="modal-close">Got it</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+
+  var KEY = "pixel-playground-v1";
+  var state = {
+    sound: true,
+    xp: 0,
+    coins: 0,
+    clicks: 0,
+    ttt: { w: 0, d: 0, l: 0 },
+    memBest: 0,
+    frBest: 0,
+    frRuns: 0,
+    gsBest: 0,
+    rps: { w: 0, t: 0, l: 0, best: 0 },
+    dice: { rolls: 0, doubles: 0, max: 0 },
+    ach: {},
+    bonusDay: "",
+    whackBest: 0,
+    simonBest: 0,
+    reactBest: 0,
+    whackLvl: 1,
+    simonLvl: 1,
+    runBest: 0,
+    lang: "en",
+    rockPets: 0,
+    pizzaWins: 0
+  };
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(KEY);
+      if (raw) {
+        var saved = JSON.parse(raw);
+        Object.keys(saved).forEach(function (k) { state[k] = saved[k]; });
+      }
+    } catch (e) {}
+    try {
+      var th = localStorage.getItem(KEY + "-theme");
+      if (th) { document.documentElement.setAttribute("data-theme", th); }
+    } catch (e) {}
+  }
+
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+  }
+
+  /* ---------- sound ---------- */
+  var audio = null;
+  function beep(freq, dur, type) {
+    if (!state.sound) { return; }
+    try {
+      audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+      var o = audio.createOscillator();
+      var g = audio.createGain();
+      o.type = type || "square";
+      o.frequency.value = freq || 440;
+      g.gain.value = 0.04;
+      o.connect(g);
+      g.connect(audio.destination);
+      o.start();
+      o.stop(audio.currentTime + (dur || 0.08));
+    } catch (e) {}
+  }
+  function jingle(kind) {
+    var notes = kind === "win" ? [523, 659, 784, 1047] : kind === "lose" ? [330, 262, 196] : [440, 554];
+    notes.forEach(function (n, i) {
+      setTimeout(function () { beep(n, 0.12, "triangle"); }, i * 110);
+    });
+  }
+
+  /* ---------- feedback ---------- */
+  function toast(msg, kind) {
+    var t = document.createElement("div");
+    t.className = "toast " + (kind || "");
+    t.textContent = msg;
+    $("#toasts").appendChild(t);
+    while ($("#toasts").children.length > 3) {
+      $("#toasts").removeChild($("#toasts").firstChild);
+    }
+    setTimeout(function () {
+      if (t.parentNode) { t.parentNode.removeChild(t); }
+    }, 2600);
+  }
+
+  function logLine(msg) {
+    var li = document.createElement("li");
+    var d = new Date();
+    var ts = d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+    li.innerHTML = "<span>" + ts + "</span>";
+    li.appendChild(document.createTextNode(msg));
+    var list = $("#feedList");
+    list.insertBefore(li, list.firstChild);
+    while (list.children.length > 40) {
+      list.removeChild(list.lastChild);
+    }
+  }
+
+  function say(msg, kind) {
+    toast(msg, kind);
+    logLine(msg);
+  }
+
+  function ripple(btn, e) {
+    var r = btn.getBoundingClientRect();
+    var s = document.createElement("span");
+    s.className = "ripple";
+    s.style.left = ((e.clientX || r.left + r.width / 2) - r.left - 60) + "px";
+    s.style.top = ((e.clientY || r.top + r.height / 2) - r.top - 60) + "px";
+    btn.appendChild(s);
+    setTimeout(function () { if (s.parentNode) { s.parentNode.removeChild(s); } }, 520);
+  }
+
+  /* ---------- progress ---------- */
+  function level() { return Math.floor(state.xp / 100) + 1; }
+
+  function addXp(n) {
+    var before = level();
+    state.xp += n;
+    if (level() > before) {
+      say("Level up! You reached level " + level() + ".", "good");
+      jingle("win");
+    }
+  }
+
+  function addCoins(n) { state.coins = Math.max(0, state.coins + n); }
+
+  var achievements = [
+    { id: "first", icon: "👆", name: "First click", desc: "Press any button", test: function () { return state.clicks >= 1; } },
+    { id: "ten", icon: "🔟", name: "Warming up", desc: "Reach 10 clicks", test: function () { return state.clicks >= 10; } },
+    { id: "hundred", icon: "💯", name: "Century", desc: "Reach 100 clicks", test: function () { return state.clicks >= 100; } },
+    { id: "ttt", icon: "❌", name: "Three in a row", desc: "Beat the bot", test: function () { return state.ttt.w >= 1; } },
+    { id: "mem", icon: "🧠", name: "Elephant mind", desc: "Clear the memory board", test: function () { return state.memBest > 0; } },
+    { id: "fr", icon: "⚡", name: "Finger storm", desc: "Land 50 frenzy clicks", test: function () { return state.frBest >= 50; } },
+    { id: "gs", icon: "🎯", name: "Sharp shooter", desc: "Guess in 7 tries or fewer", test: function () { return state.gsBest > 0 && state.gsBest <= 7; } },
+    { id: "rps", icon: "🔥", name: "On a roll", desc: "Win three duels in a row", test: function () { return state.rps.best >= 3; } },
+    { id: "dice", icon: "🎲", name: "Lucky seven", desc: "Roll a total of 12", test: function () { return state.dice.max >= 12; } },
+    { id: "mole", icon: "🐹", name: "Mole master", desc: "Whack 15 moles in one round", test: function () { return state.whackBest >= 15; } },
+    { id: "simon", icon: "🎵", name: "Sharp ears", desc: "Reach round 6 in Simon says", test: function () { return state.simonBest >= 5; } },
+    { id: "react", icon: "⏱️", name: "Lightning reflexes", desc: "React in under 300 ms", test: function () { return state.reactBest > 0 && state.reactBest <= 300; } },
+    { id: "runaway", icon: "🏃", name: "Coward catcher", desc: "Catch the button 8 times", test: function () { return state.runBest >= 8; } },
+    { id: "rock", icon: "🪨", name: "Rock whisperer", desc: "Share 20 moments with Rocky", test: function () { return state.rockPets >= 20; } },
+    { id: "pizza", icon: "🍕", name: "Chaos chef", desc: "Serve a perfectly cursed pizza", test: function () { return state.pizzaWins >= 1; } },
+    { id: "rich", icon: "🪙", name: "Pocket change", desc: "Hold 25 coins", test: function () { return state.coins >= 25; } }
+  ];
+
+  function checkAch() {
+    achievements.forEach(function (a) {
+      if (!state.ach[a.id] && a.test()) {
+        state.ach[a.id] = true;
+        addCoins(5);
+        say("Badge unlocked: " + a.name + " (+5 coins)", "good");
+        jingle("win");
+      }
+    });
+  }
+
+  function renderAch() {
+    var grid = $("#achGrid");
+    grid.innerHTML = "";
+    var got = 0;
+    achievements.forEach(function (a) {
+      var on = !!state.ach[a.id];
+      if (on) { got++; }
+      var d = document.createElement("div");
+      d.className = "ach" + (on ? " got" : "");
+      d.innerHTML = '<span class="i">' + a.icon + "</span><div><b>" + a.name + "</b><small>" + a.desc + "</small></div>";
+      grid.appendChild(d);
+    });
+    $("#achCount").textContent = got + " of " + achievements.length + " unlocked";
+  }
+
+  function renderHud() {
+    $("#hudLevel").textContent = level();
+    $("#hudXp").textContent = state.xp;
+    $("#hudCoins").textContent = state.coins;
+    $("#hudClicks").textContent = state.clicks;
+    $("#xpFill").style.width = (state.xp % 100) + "%";
+    $("#tttW").textContent = state.ttt.w;
+    $("#tttD").textContent = state.ttt.d;
+    $("#tttL").textContent = state.ttt.l;
+    $("#memBest").textContent = state.memBest || "-";
+    $("#frBest").textContent = state.frBest;
+    $("#frRuns").textContent = state.frRuns;
+    $("#gsBest").textContent = state.gsBest || "-";
+    $("#rpsW").textContent = state.rps.w;
+    $("#rpsT").textContent = state.rps.t;
+    $("#rpsL").textContent = state.rps.l;
+    $("#diceRolls").textContent = state.dice.rolls;
+    $("#diceDoubles").textContent = state.dice.doubles;
+    $("#diceMax").textContent = state.dice.max;
+    $("#whBest").textContent = state.whackBest;
+    $("#rbBest").textContent = state.runBest;
+    $("#rockCount").textContent = state.rockPets;
+    $("#pzWins").textContent = state.pizzaWins;
+    $("#siBest").textContent = state.simonBest;
+    $("#reBest").textContent = state.reactBest ? state.reactBest + " ms" : "-";
+    var sb = $("#btnSound");
+    sb.textContent = "Sound: " + (state.sound ? "on" : "off");
+    sb.classList.toggle("on", state.sound);
+    renderAch();
+  }
+
+  function refresh() {
+    checkAch();
+    renderHud();
+    save();
+  }
+
+  /* ---------- navigation ---------- */
+  function nav(view) {
+    stopBg();
+    $$(".view").forEach(function (v) { v.classList.remove("active"); });
+    $("#view-" + view).classList.add("active");
+    $$(".tab").forEach(function (t) {
+      t.classList.toggle("current", t.getAttribute("data-view") === view);
+    });
+  }
+
+  var helpText = {
+    ttt: ["Tic-tac-toe", "<ul><li>Tap a square to place an X.</li><li>Get three in a row to win.</li><li>Hard bot never loses, so a draw is a good result.</li></ul>"],
+    mem: ["Memory", "<ul><li>Flip two cards per turn.</li><li>Matches stay open.</li><li>Fewer moves means more XP.</li><li>Peek costs 3 coins and shows the board briefly.</li></ul>"],
+    frenzy: ["Click frenzy", "<ul><li>Press Start to begin a ten second timer.</li><li>Click the big button as often as you can.</li><li>50 or more unlocks a badge.</li></ul>"],
+    guess: ["Number guess", "<ul><li>Type a number with the pad.</li><li>Press Guess to get higher or lower.</li><li>Hints cost 2 coins.</li></ul>"],
+    rps: ["Rock paper scissors", "<ul><li>Rock beats scissors.</li><li>Scissors beat paper.</li><li>Paper beats rock.</li></ul>"],
+    whack: ["Whack-a-mole", "<ul><li>Press Start for a 20 second round.</li><li>Tap each mole as it appears.</li><li>Missing a hole costs a point.</li><li>Reach the goal to unlock the next level: more holes and faster moles.</li></ul>"],
+    simon: ["Simon says", "<ul><li>Watch the colors light up.</li><li>Repeat the pattern in order.</li><li>One wrong press ends the game.</li><li>Reach the goal round to unlock the next level: more pads and a faster tempo.</li></ul>"],
+    react: ["Reaction test", "<ul><li>Click the box to arm it.</li><li>Wait for green. Do not click early.</li><li>Under 300 ms unlocks a badge.</li></ul>"],
+    runaway: ["Runaway button", "<ul><li>Press Start for a 15 second chase.</li><li>Click the button to catch it.</li><li>It hops away, and gets better at dodging the more you catch.</li></ul>"],
+    rock: ["Pet rock", "<ul><li>Pet, feed, walk or sing to Rocky.</li><li>Ignoring him makes him sulk.</li><li>He is a rock, so results are hard to measure.</li></ul>"],
+    pizza: ["Cursed pizza", "<ul><li>Each topping adds chaos.</li><li>Serve between 70 and 100 for a perfectly cursed pizza.</li><li>Over 100 and the pizza explodes.</li></ul>"],
+    dice: ["Lucky dice", "<ul><li>Roll two dice.</li><li>Doubles pay 3 coins.</li><li>Snake eyes pays 10.</li></ul>"]
+  };
+
+  function openModal(game) {
+    var h = helpText[game] || ["Rules", "<p>Have fun.</p>"];
+    $("#modalTitle").textContent = h[0];
+    $("#modalBody").innerHTML = h[1];
+    $("#modal").hidden = false;
+  }
+
+  /* ---------- tic-tac-toe ---------- */
+  var LINES = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+  var ttt = { board: [], over: false, hard: false };
+
+  function tttWinner(b) {
+    for (var i = 0; i < LINES.length; i++) {
+      var l = LINES[i];
+      if (b[l[0]] && b[l[0]] === b[l[1]] && b[l[0]] === b[l[2]]) {
+        return { who: b[l[0]], line: l };
+      }
+    }
+    return b.indexOf(null) === -1 ? { who: "draw", line: [] } : null;
+  }
+
+  function minimax(b, turn) {
+    var w = tttWinner(b);
+    if (w) { return w.who === "O" ? 1 : w.who === "X" ? -1 : 0; }
+    var best = turn === "O" ? -2 : 2;
+    for (var i = 0; i < 9; i++) {
+      if (b[i]) { continue; }
+      b[i] = turn;
+      var s = minimax(b, turn === "O" ? "X" : "O");
+      b[i] = null;
+      best = turn === "O" ? Math.max(best, s) : Math.min(best, s);
+    }
+    return best;
+  }
+
+  function botMove() {
+    var free = [];
+    for (var i = 0; i < 9; i++) { if (!ttt.board[i]) { free.push(i); } }
+    if (!ttt.hard) { return free[Math.floor(Math.random() * free.length)]; }
+    var bestScore = -2;
+    var pick = free[0];
+    free.forEach(function (i) {
+      ttt.board[i] = "O";
+      var s = minimax(ttt.board, "X");
+      ttt.board[i] = null;
+      if (s > bestScore) { bestScore = s; pick = i; }
+    });
+    return pick;
+  }
+
+  function tttRender(line) {
+    var wrap = $("#tttBoard");
+    wrap.innerHTML = "";
+    ttt.board.forEach(function (v, i) {
+      var b = document.createElement("button");
+      b.className = "cell" + (v ? " " + v.toLowerCase() : "") + (line && line.indexOf(i) > -1 ? " win" : "");
+      b.setAttribute("data-action", "ttt-cell");
+      b.setAttribute("data-i", i);
+      b.setAttribute("aria-label", "Square " + (i + 1) + (v ? ", " + v : ", empty"));
+      b.textContent = v || "";
+      wrap.appendChild(b);
+    });
+  }
+
+  function tttNew() {
+    ttt.board = [null, null, null, null, null, null, null, null, null];
+    ttt.over = false;
+    $("#tttStatus").textContent = "Your move.";
+    tttRender();
+  }
+
+  function tttEnd(res) {
+    ttt.over = true;
+    tttRender(res.line);
+    if (res.who === "X") {
+      state.ttt.w++;
+      addXp(ttt.hard ? 40 : 20);
+      addCoins(ttt.hard ? 6 : 3);
+      $("#tttStatus").textContent = "You win!";
+      say("You beat the bot. Nice line.", "good");
+      jingle("win");
+    } else if (res.who === "O") {
+      state.ttt.l++;
+      addXp(5);
+      $("#tttStatus").textContent = "The bot wins this one.";
+      say("The bot took that round. Try again.", "bad");
+      jingle("lose");
+    } else {
+      state.ttt.d++;
+      addXp(10);
+      $("#tttStatus").textContent = "It is a draw.";
+      say("Draw. Nobody blinks.", "info");
+    }
+  }
+
+  function tttPlay(i) {
+    if (ttt.over) { say("Round finished. Press New round.", "info"); return; }
+    if (ttt.board[i]) { say("That square is taken.", "bad"); return; }
+    ttt.board[i] = "X";
+    var r = tttWinner(ttt.board);
+    if (r) { tttEnd(r); return; }
+    ttt.board[botMove()] = "O";
+    r = tttWinner(ttt.board);
+    if (r) { tttEnd(r); return; }
+    tttRender();
+    $("#tttStatus").textContent = "Your move.";
+    say("X placed on square " + (i + 1) + ". Bot replied.");
+  }
+
+  /* ---------- memory ---------- */
+  var FACES = ["🚀", "👾", "🕹️", "🎲", "🏆", "⚡", "🧩", "🎯"];
+  var mem = { cards: [], open: [], lock: false, moves: 0, pairs: 0 };
+
+  function shuffle(a) {
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
+  function memRender() {
+    var g = $("#memGrid");
+    g.innerHTML = "";
+    mem.cards.forEach(function (c, i) {
+      var b = document.createElement("button");
+      b.className = "mcard" + (c.up ? " up" : "") + (c.done ? " done" : "");
+      b.setAttribute("data-action", "mem-flip");
+      b.setAttribute("data-i", i);
+      b.setAttribute("aria-label", c.up || c.done ? "Card " + c.face : "Hidden card " + (i + 1));
+      b.textContent = c.up || c.done ? c.face : "?";
+      g.appendChild(b);
+    });
+    $("#memMoves").textContent = mem.moves;
+    $("#memPairs").textContent = mem.pairs;
+  }
+
+  function memNew() {
+    var faces = shuffle(FACES.concat(FACES));
+    mem.cards = faces.map(function (f) { return { face: f, up: false, done: false }; });
+    mem.open = [];
+    mem.lock = false;
+    mem.moves = 0;
+    mem.pairs = 0;
+    $("#memStatus").textContent = "Flip a card to begin.";
+    memRender();
+  }
+
+  function memFlip(i) {
+    var c = mem.cards[i];
+    if (mem.lock) { say("Hold on, cards are flipping back.", "info"); return; }
+    if (c.up || c.done) { say("That card is already open.", "bad"); return; }
+    c.up = true;
+    mem.open.push(i);
+    beep(500 + i * 20, 0.06);
+    if (mem.open.length === 2) {
+      mem.moves++;
+      var a = mem.cards[mem.open[0]];
+      var b = mem.cards[mem.open[1]];
+      if (a.face === b.face) {
+        a.done = b.done = true;
+        a.up = b.up = false;
+        mem.pairs++;
+        mem.open = [];
+        say("Match! " + a.face, "good");
+        if (mem.pairs === 8) { memWin(); }
+      } else {
+        mem.lock = true;
+        say("No match. Remember those.", "bad");
+        setTimeout(function () {
+          a.up = b.up = false;
+          mem.open = [];
+          mem.lock = false;
+          memRender();
+        }, 800);
+      }
+    } else {
+      say("Flipped a card: " + c.face);
+    }
+    memRender();
+  }
+
+  function memWin() {
+    var xp = Math.max(10, 60 - mem.moves * 2);
+    addXp(xp);
+    addCoins(4);
+    if (!state.memBest || mem.moves < state.memBest) { state.memBest = mem.moves; }
+    $("#memStatus").textContent = "Board cleared in " + mem.moves + " moves.";
+    say("Board cleared in " + mem.moves + " moves! +" + xp + " XP", "good");
+    jingle("win");
+  }
+
+  function memPeek() {
+    if (state.coins < 3) { say("You need 3 coins to peek.", "bad"); return; }
+    if (mem.lock) { return; }
+    addCoins(-3);
+    mem.lock = true;
+    var snapshot = mem.cards.map(function (c) { return c.up; });
+    mem.cards.forEach(function (c) { c.up = true; });
+    memRender();
+    say("Peeking for a moment. Memorize!", "info");
+    setTimeout(function () {
+      mem.cards.forEach(function (c, i) { c.up = snapshot[i]; });
+      mem.lock = false;
+      memRender();
+      refresh();
+    }, 1200);
+  }
+
+  /* ---------- click frenzy ---------- */
+  var fr = { running: false, left: 100, count: 0, timer: null };
+
+  function frStop() {
+    clearInterval(fr.timer);
+    fr.running = false;
+    state.frRuns++;
+    var rate = (fr.count / 10).toFixed(1);
+    if (fr.count > state.frBest) { state.frBest = fr.count; }
+    addXp(Math.min(60, fr.count));
+    addCoins(Math.floor(fr.count / 10));
+    $("#frStatus").textContent = "Time! " + fr.count + " clicks (" + rate + " per second).";
+    say("Frenzy over: " + fr.count + " clicks.", fr.count >= 50 ? "good" : "info");
+    jingle(fr.count >= 50 ? "win" : "info");
+    refresh();
+  }
+
+  function frStart() {
+    if (fr.running) { say("Already running. Keep clicking!", "info"); return; }
+    fr.running = true;
+    fr.left = 100;
+    fr.count = 0;
+    $("#frCount").textContent = "0";
+    $("#frMeter").style.width = "100%";
+    $("#frStatus").textContent = "GO!";
+    say("Frenzy started. Ten seconds!", "good");
+    fr.timer = setInterval(function () {
+      fr.left--;
+      $("#frMeter").style.width = fr.left + "%";
+      if (fr.left <= 0) { frStop(); }
+    }, 100);
+  }
+
+  function frClick() {
+    if (!fr.running) { say("Press Start first.", "bad"); return; }
+    fr.count++;
+    $("#frCount").textContent = fr.count;
+    beep(300 + fr.count * 6, 0.03);
+    if (fr.count % 10 === 0) { say(fr.count + " clicks and counting!", "good"); }
+  }
+
+  function frReset() {
+    clearInterval(fr.timer);
+    fr.running = false;
+    fr.count = 0;
+    fr.left = 100;
+    $("#frCount").textContent = "0";
+    $("#frMeter").style.width = "100%";
+    $("#frStatus").textContent = "Ready when you are.";
+    say("Frenzy reset.", "info");
+  }
+
+  /* ---------- number guess ---------- */
+  var gs = { secret: 0, input: "", tries: 0, done: false };
+
+  function gsNew() {
+    gs.secret = 1 + Math.floor(Math.random() * 100);
+    gs.input = "";
+    gs.tries = 0;
+    gs.done = false;
+    $("#gsDisplay").textContent = "_";
+    $("#gsHint").textContent = "New number picked. Go!";
+    $("#gsTries").textContent = "0";
+  }
+
+  function gsPad(key) {
+    if (key === "clear") { gs.input = ""; }
+    else if (key === "back") { gs.input = gs.input.slice(0, -1); }
+    else if (gs.input.length < 3) { gs.input += key; }
+    $("#gsDisplay").textContent = gs.input || "_";
+    beep(400 + (parseInt(key, 10) || 0) * 40, 0.05);
+    say("Pad: " + (key === "clear" ? "cleared" : key === "back" ? "undo" : key));
+  }
+
+  function gsGuess() {
+    if (gs.done) { say("Solved already. Press New number.", "info"); return; }
+    var n = parseInt(gs.input, 10);
+    if (!n || n < 1 || n > 100) { say("Enter a number from 1 to 100.", "bad"); return; }
+    gs.tries++;
+    $("#gsTries").textContent = gs.tries;
+    gs.input = "";
+    $("#gsDisplay").textContent = n;
+    if (n === gs.secret) {
+      gs.done = true;
+      if (!state.gsBest || gs.tries < state.gsBest) { state.gsBest = gs.tries; }
+      addXp(Math.max(10, 50 - gs.tries * 4));
+      addCoins(3);
+      $("#gsHint").textContent = "Correct! It was " + gs.secret + ".";
+      say("Found it in " + gs.tries + " tries!", "good");
+      jingle("win");
+    } else if (n < gs.secret) {
+      $("#gsHint").textContent = n + " is too low. Go higher.";
+      say(n + " is too low.", "info");
+    } else {
+      $("#gsHint").textContent = n + " is too high. Go lower.";
+      say(n + " is too high.", "info");
+    }
+  }
+
+  function gsHint() {
+    if (gs.done) { say("Already solved.", "info"); return; }
+    if (state.coins < 2) { say("You need 2 coins for a hint.", "bad"); return; }
+    addCoins(-2);
+    var parity = gs.secret % 2 === 0 ? "even" : "odd";
+    var tens = Math.floor((gs.secret - 1) / 10) * 10;
+    $("#gsHint").textContent = "It is " + parity + " and between " + (tens + 1) + " and " + (tens + 10) + ".";
+    say("Hint used. The number is " + parity + ".", "info");
+  }
+
+  /* ---------- rock paper scissors ---------- */
+  var ICON = { rock: "🪨", paper: "📄", scissors: "✂️" };
+  var BEATS = { rock: "scissors", paper: "rock", scissors: "paper" };
+  var rpsStreak = 0;
+
+  function rpsPick(p) {
+    var opts = ["rock", "paper", "scissors"];
+    var bot = opts[Math.floor(Math.random() * 3)];
+    $("#rpsYou").textContent = ICON[p];
+    $("#rpsBot").textContent = ICON[bot];
+    if (p === bot) {
+      state.rps.t++;
+      rpsStreak = 0;
+      $("#rpsStatus").textContent = "Tie. Great minds think alike.";
+      say("Tie on " + p + ".", "info");
+      addXp(2);
+    } else if (BEATS[p] === bot) {
+      state.rps.w++;
+      rpsStreak++;
+      state.rps.best = Math.max(state.rps.best, rpsStreak);
+      $("#rpsStatus").textContent = p + " beats " + bot + ". You win!";
+      say("You win! " + p + " beats " + bot + ".", "good");
+      addXp(12);
+      addCoins(1);
+      jingle("win");
+    } else {
+      state.rps.l++;
+      rpsStreak = 0;
+      $("#rpsStatus").textContent = bot + " beats " + p + ". You lose.";
+      say("You lose. " + bot + " beats " + p + ".", "bad");
+      addXp(3);
+      jingle("lose");
+    }
+    $("#rpsS").textContent = rpsStreak;
+  }
+
+  /* ---------- dice ---------- */
+  var FACE = ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"];
+
+  function diceRoll() {
+    var a = 1 + Math.floor(Math.random() * 6);
+    var b = 1 + Math.floor(Math.random() * 6);
+    var d1 = $("#die1");
+    var d2 = $("#die2");
+    d1.textContent = FACE[a - 1];
+    d2.textContent = FACE[b - 1];
+    [d1, d2].forEach(function (d) {
+      d.classList.remove("roll");
+      void d.offsetWidth;
+      d.classList.add("roll");
+    });
+    state.dice.rolls++;
+    state.dice.max = Math.max(state.dice.max, a + b);
+    var msg = "You rolled " + (a + b) + ".";
+    var kind = "info";
+    if (a === 1 && b === 1) {
+      state.dice.doubles++;
+      addCoins(10);
+      msg = "Snake eyes! +10 coins.";
+      kind = "good";
+      jingle("win");
+    } else if (a === b) {
+      state.dice.doubles++;
+      addCoins(3);
+      msg = "Doubles of " + a + "! +3 coins.";
+      kind = "good";
+      jingle("win");
+    } else {
+      beep(200 + (a + b) * 30, 0.1);
+    }
+    addXp(4);
+    $("#diceStatus").textContent = msg;
+    say(msg, kind);
+  }
+
+  function diceReset() {
+    state.dice = { rolls: 0, doubles: 0, max: 0 };
+    $("#die1").textContent = "⚀";
+    $("#die2").textContent = "⚀";
+    $("#diceStatus").textContent = "Roll to begin.";
+    say("Dice stats cleared.", "info");
+  }
+
+  /* ---------- whack-a-mole ---------- */
+  var WH_LEVELS = [
+    { cols: 3, rows: 2, gap: 1000, vis: 900, need: 5 },
+    { cols: 3, rows: 3, gap: 850, vis: 750, need: 7 },
+    { cols: 4, rows: 3, gap: 700, vis: 600, need: 9 },
+    { cols: 4, rows: 4, gap: 580, vis: 480, need: 11 },
+    { cols: 5, rows: 4, gap: 470, vis: 380, need: 13 },
+    { cols: 5, rows: 5, gap: 380, vis: 300, need: 15 }
+  ];
+  var wh = { run: false, score: 0, left: 20, at: -1, tick: null, pop: null, hideT: null, lvl: 1 };
+
+  function whLevelBar() {
+    var row = $("#whLevels");
+    row.innerHTML = "";
+    WH_LEVELS.forEach(function (c, i) {
+      var open = i + 1 <= state.whackLvl;
+      var b = document.createElement("button");
+      b.className = "btn small" + (i + 1 === wh.lvl ? " on" : open ? "" : " ghost");
+      b.setAttribute("data-action", "wh-level");
+      b.setAttribute("data-l", i + 1);
+      b.textContent = open ? "Lv " + (i + 1) : "🔒 " + (i + 1);
+      row.appendChild(b);
+    });
+    var c = WH_LEVELS[wh.lvl - 1];
+    $("#whInfo").textContent = "Level " + wh.lvl + " of " + WH_LEVELS.length + ": " + (c.cols * c.rows) + " holes, goal " + c.need + " moles.";
+  }
+
+  function whSetLevel(l) {
+    if (wh.run) { say("Finish the round first.", "info"); return; }
+    if (l > state.whackLvl) { say("Level " + l + " is locked. Clear level " + (l - 1) + " first.", "bad"); return; }
+    wh.lvl = l;
+    $("#whStatus").textContent = "Press Start.";
+    whRender();
+    say("Whack-a-mole level " + l + " selected.", "info");
+  }
+
+  function whRender() {
+    var cfg = WH_LEVELS[wh.lvl - 1];
+    var g = $("#whGrid");
+    if (g.children.length !== cfg.cols * cfg.rows) {
+      g.innerHTML = "";
+      g.className = "molegrid" + (cfg.cols > 3 ? " dense" : "");
+      g.style.gridTemplateColumns = "repeat(" + cfg.cols + ", 1fr)";
+      for (var i = 0; i < cfg.cols * cfg.rows; i++) {
+        var b = document.createElement("button");
+        b.className = "btn hole";
+        b.setAttribute("data-action", "wh-hit");
+        b.setAttribute("data-i", i);
+        b.setAttribute("aria-label", "Hole " + (i + 1));
+        g.appendChild(b);
+      }
+    }
+    $$(".hole").forEach(function (h, i) {
+      h.textContent = i === wh.at ? "🐹" : "";
+      h.classList.toggle("up", i === wh.at);
+    });
+    $("#whScore").textContent = wh.score;
+    $("#whTime").textContent = wh.left;
+    if (!wh.run) { whLevelBar(); }
+  }
+
+  function whHalt() {
+    clearInterval(wh.tick);
+    clearInterval(wh.pop);
+    clearTimeout(wh.hideT);
+    wh.run = false;
+    wh.at = -1;
+  }
+
+  function whEnd() {
+    whHalt();
+    if (wh.score > state.whackBest) { state.whackBest = wh.score; }
+    addXp(Math.min(50, wh.score * 3));
+    addCoins(Math.floor(wh.score / 5));
+    var lv = WH_LEVELS[wh.lvl - 1];
+    if (wh.score >= lv.need) {
+      if (wh.lvl < WH_LEVELS.length) {
+        wh.lvl++;
+        if (wh.lvl > state.whackLvl) { state.whackLvl = wh.lvl; }
+        addXp(20);
+        addCoins(2);
+        $("#whStatus").textContent = "Level cleared with " + wh.score + "! Level " + wh.lvl + " unlocked.";
+        say("Level " + (wh.lvl - 1) + " cleared! Level " + wh.lvl + " is next.", "good");
+      } else {
+        $("#whStatus").textContent = "Final level cleared with " + wh.score + "! Mole legend.";
+        say("All whack-a-mole levels cleared!", "good");
+      }
+    } else {
+      $("#whStatus").textContent = "Time! " + wh.score + " of " + lv.need + " needed. Try again.";
+    }
+    say("Round over: " + wh.score + " moles.", wh.score >= 15 ? "good" : "info");
+    jingle(wh.score >= 10 ? "win" : "info");
+    whRender();
+  }
+
+  function whStart() {
+    if (wh.run) { say("Round already running.", "info"); return; }
+    wh.run = true;
+    wh.score = 0;
+    wh.left = 20;
+    $("#whStatus").textContent = "Go go go!";
+    say("Level " + wh.lvl + " started. Goal: " + WH_LEVELS[wh.lvl - 1].need + " moles.", "good");
+    wh.tick = setInterval(function () {
+      wh.left--;
+      if (wh.left <= 0) { whEnd(); refresh(); } else { whRender(); }
+    }, 1000);
+    wh.pop = setInterval(function () {
+      var cfg = WH_LEVELS[wh.lvl - 1];
+      var cells = cfg.cols * cfg.rows;
+      var n = Math.floor(Math.random() * cells);
+      wh.at = n === wh.at ? (n + 1) % cells : n;
+      clearTimeout(wh.hideT);
+      wh.hideT = setTimeout(function () { wh.at = -1; whRender(); }, cfg.vis);
+      whRender();
+    }, WH_LEVELS[wh.lvl - 1].gap);
+    whRender();
+  }
+
+  function whHit(i) {
+    if (!wh.run) { say("Press Start first.", "bad"); return; }
+    if (i === wh.at) {
+      wh.score++;
+      wh.at = -1;
+      beep(620, 0.06);
+      say("Whack! " + wh.score + " so far.", "good");
+    } else {
+      wh.score = Math.max(0, wh.score - 1);
+      beep(150, 0.1);
+      say("Missed. -1 point.", "bad");
+    }
+    whRender();
+  }
+
+  /* ---------- simon says ---------- */
+  var si = { seq: [], pos: 0, busy: false, on: false, lvl: 1 };
+  var SI_LEVELS = [
+    { pads: 4, cols: 2, step: 800, goal: 4 },
+    { pads: 4, cols: 2, step: 600, goal: 6 },
+    { pads: 6, cols: 3, step: 520, goal: 7 },
+    { pads: 6, cols: 3, step: 420, goal: 9 },
+    { pads: 9, cols: 3, step: 360, goal: 10 },
+    { pads: 9, cols: 3, step: 300, goal: 12 }
+  ];
+  var SI_TONE = [262, 294, 330, 349, 392, 440, 494, 523, 587];
+  var SI_COL = ["var(--pink)", "var(--cyan)", "var(--sun)", "var(--lime)", "#9b7bff", "#ff8a3d", "#2fd6a1", "#ff6b6b", "#6b8bff"];
+
+  function siBuild() {
+    var cfg = SI_LEVELS[si.lvl - 1];
+    var g = $("#siPads");
+    g.innerHTML = "";
+    g.style.gridTemplateColumns = "repeat(" + cfg.cols + ", 1fr)";
+    for (var i = 0; i < cfg.pads; i++) {
+      var b = document.createElement("button");
+      b.style.background = SI_COL[i];
+      b.setAttribute("data-action", "si-pad");
+      b.setAttribute("data-c", i);
+      b.setAttribute("aria-label", "Pad " + (i + 1));
+      g.appendChild(b);
+    }
+  }
+
+  function siInfo() {
+    var row = $("#siLevels");
+    row.innerHTML = "";
+    SI_LEVELS.forEach(function (c, i) {
+      var open = i + 1 <= state.simonLvl;
+      var b = document.createElement("button");
+      b.className = "btn small" + (i + 1 === si.lvl ? " on" : open ? "" : " ghost");
+      b.setAttribute("data-action", "si-level");
+      b.setAttribute("data-l", i + 1);
+      b.textContent = open ? "Lv " + (i + 1) : "🔒 " + (i + 1);
+      row.appendChild(b);
+    });
+    var c = SI_LEVELS[si.lvl - 1];
+    $("#siInfo").textContent = "Level " + si.lvl + " of " + SI_LEVELS.length + ": " + c.pads + " pads, reach round " + c.goal + ".";
+  }
+
+  function siSetLevel(l) {
+    if (l > state.simonLvl) { say("Level " + l + " is locked. Clear level " + (l - 1) + " first.", "bad"); return; }
+    si.lvl = l;
+    si.on = false;
+    siBuild();
+    siInfo();
+    $("#siStatus").textContent = "Press Start.";
+    say("Simon level " + l + " selected.", "info");
+  }
+
+  function siFlash(c) {
+    var b = $$(".simon button")[c];
+    b.classList.add("lit");
+    beep(SI_TONE[c], 0.25, "triangle");
+    setTimeout(function () { b.classList.remove("lit"); }, Math.max(140, SI_LEVELS[si.lvl - 1].step * 0.5));
+  }
+
+  function siPlay() {
+    si.busy = true;
+    si.pos = 0;
+    var i = 0;
+    $("#siStatus").textContent = "Watch closely...";
+    var t = setInterval(function () {
+      siFlash(si.seq[i]);
+      i++;
+      if (i >= si.seq.length) {
+        clearInterval(t);
+        setTimeout(function () {
+          si.busy = false;
+          $("#siStatus").textContent = "Your turn.";
+        }, 450);
+      }
+    }, SI_LEVELS[si.lvl - 1].step);
+  }
+
+  function siStart() {
+    siBuild();
+    si.seq = [Math.floor(Math.random() * SI_LEVELS[si.lvl - 1].pads)];
+    si.on = true;
+    $("#siRound").textContent = 1;
+    say("Simon says: watch the pattern.", "info");
+    siPlay();
+  }
+
+  function siPress(c) {
+    if (!si.on) { say("Press Start first.", "bad"); return; }
+    if (si.busy) { say("Wait for the pattern to finish.", "info"); return; }
+    siFlash(c);
+    if (c !== si.seq[si.pos]) {
+      si.on = false;
+      var score = si.seq.length - 1;
+      if (score > state.simonBest) { state.simonBest = score; }
+      addXp(score * 5);
+      addCoins(Math.floor(score / 3));
+      $("#siStatus").textContent = "Wrong color. You cleared " + score + " rounds.";
+      say("Game over. You cleared " + score + " rounds.", "bad");
+      jingle("lose");
+      return;
+    }
+    si.pos++;
+    if (si.pos === si.seq.length) {
+      addXp(5);
+      var cfg = SI_LEVELS[si.lvl - 1];
+      if (si.seq.length >= cfg.goal) {
+        si.on = false;
+        if (si.seq.length > state.simonBest) { state.simonBest = si.seq.length; }
+        var done = si.lvl;
+        if (si.lvl < SI_LEVELS.length) {
+          si.lvl++;
+          if (si.lvl > state.simonLvl) { state.simonLvl = si.lvl; }
+          $("#siStatus").textContent = "Level " + done + " cleared! Level " + si.lvl + " unlocked.";
+        } else {
+          $("#siStatus").textContent = "Final level cleared. You are a maestro!";
+        }
+        addXp(25);
+        addCoins(3);
+        say("Simon level " + done + " cleared!", "good");
+        jingle("win");
+        siBuild();
+        siInfo();
+        return;
+      }
+      si.seq.push(Math.floor(Math.random() * cfg.pads));
+      $("#siRound").textContent = si.seq.length;
+      say("Round cleared! Now " + si.seq.length + " steps.", "good");
+      setTimeout(siPlay, 800);
+    }
+  }
+
+  /* ---------- reaction test ---------- */
+  var re = { s: "idle", t0: 0, to: null };
+
+  function reArea() {
+    var a = $("#reArea");
+    if (re.s === "idle") {
+      re.s = "wait";
+      a.className = "btn reaction wait";
+      a.textContent = "Wait for green...";
+      say("Armed. Wait for green.", "info");
+      re.to = setTimeout(function () {
+        re.s = "go";
+        re.t0 = performance.now();
+        a.className = "btn reaction go";
+        a.textContent = "CLICK NOW!";
+      }, 1000 + Math.random() * 2500);
+    } else if (re.s === "wait") {
+      clearTimeout(re.to);
+      re.s = "idle";
+      a.className = "btn reaction";
+      a.textContent = "Too soon! Click to try again";
+      say("Too early. Wait for green.", "bad");
+    } else {
+      var ms = Math.round(performance.now() - re.t0);
+      re.s = "idle";
+      a.className = "btn reaction";
+      a.textContent = ms + " ms. Click to go again";
+      $("#reLast").textContent = ms + " ms";
+      if (!state.reactBest || ms < state.reactBest) { state.reactBest = ms; }
+      addXp(ms < 300 ? 25 : 10);
+      say("Reaction time: " + ms + " ms.", ms < 300 ? "good" : "info");
+      if (ms < 300) { jingle("win"); }
+    }
+  }
+
+  function stopBg() {
+    if (wh.run) { whHalt(); $("#whStatus").textContent = "Round cancelled."; whRender(); }
+    if (rb.run) { rbHalt(); $("#rbStatus").textContent = "Round cancelled."; }
+    clearTimeout(re.to);
+    if (re.s !== "idle") {
+      re.s = "idle";
+      $("#reArea").className = "btn reaction";
+      $("#reArea").textContent = "Click to start";
+    }
+    si.on = false;
+  }
+
+  /* ---------- runaway button ---------- */
+  var RB_LINES = ["Nope!", "Too slow, human.", "I did not sign up for this.", "My lawyer says no.", "Stop it, that tickles.", "Plot twist: I have legs.", "You caught me. I am telling everyone.", "Fine. Take your point."];
+  var rb = { run: false, score: 0, left: 15, tick: null, hop: null };
+
+  function rbMove() {
+    var a = $("#rbArena");
+    var b = $("#rbBtn");
+    b.style.left = Math.max(0, Math.random() * (a.clientWidth - b.offsetWidth)) + "px";
+    b.style.top = Math.max(0, Math.random() * (a.clientHeight - b.offsetHeight)) + "px";
+  }
+
+  function rbHalt() {
+    clearInterval(rb.tick);
+    clearInterval(rb.hop);
+    rb.run = false;
+  }
+
+  function rbEnd() {
+    rbHalt();
+    if (rb.score > state.runBest) { state.runBest = rb.score; }
+    addXp(rb.score * 4);
+    addCoins(Math.floor(rb.score / 4));
+    var q = rb.score === 0 ? "Zero. The button is laughing at you." : rb.score < 5 ? "Caught " + rb.score + ". The button needs therapy now." : "Caught " + rb.score + "! The button has filed a complaint.";
+    $("#rbStatus").textContent = q;
+    say(q, rb.score >= 5 ? "good" : "info");
+    jingle(rb.score >= 5 ? "win" : "lose");
+    refresh();
+  }
+
+  function rbStart() {
+    if (rb.run) { say("It is already running. So should you.", "info"); return; }
+    rb.run = true;
+    rb.score = 0;
+    rb.left = 15;
+    $("#rbScore").textContent = "0";
+    $("#rbTime").textContent = "15";
+    $("#rbStatus").textContent = "Catch it!";
+    rbMove();
+    say("The button is running. Chase it!", "good");
+    rb.tick = setInterval(function () {
+      rb.left--;
+      $("#rbTime").textContent = rb.left;
+      if (rb.left <= 0) { rbEnd(); }
+    }, 1000);
+    rb.hop = setInterval(rbMove, 900);
+  }
+
+  function rbCatch() {
+    if (!rb.run) { say("It is just sitting there. Press Start to make it panic.", "info"); return; }
+    rb.score++;
+    $("#rbScore").textContent = rb.score;
+    beep(500 + rb.score * 30, 0.06);
+    say(RB_LINES[Math.floor(Math.random() * RB_LINES.length)], "good");
+    rbMove();
+  }
+
+  /* ---------- pet rock ---------- */
+  var rock = { joy: 30 };
+  var ROCK_JOY = { pet: 10, feed: 6, walk: 8, sing: 12, hat: 15, ignore: -15 };
+  var ROCK_SAY = {
+    pet: ["Rocky stays perfectly still. Best day of his life.", "You pet Rocky. He seems smug, but he always does.", "Rocky has never felt so seen."],
+    feed: ["Rocky eats a pebble. Cannibalism? Unclear.", "Rocky accepts the pebble with great dignity.", "The pebble is gone. Rocky looks exactly the same."],
+    walk: ["You carried Rocky around the block. He loved every inch.", "Walk complete. Rocky traveled 0 meters on his own.", "Rocky saw a bird and felt something. Probably."],
+    sing: ["You sing to Rocky. He stays silent, which is high praise.", "Rocky is a big fan of your voice. Allegedly.", "That was a solid rock ballad. Pun absolutely intended."],
+    hat: ["Rocky wears a tiny hat. He looks unbearably classy.", "The hat suits Rocky. Nobody can argue.", "Rocky refuses to take the hat off. Respect."],
+    ignore: ["You ignore Rocky. He sulks in total silence.", "Rocky is not mad. He is just a rock with feelings.", "Rocky writes a very short poem about you. It is just a pebble."]
+  };
+
+  function rockRender() {
+    var j = rock.joy;
+    $("#rockFace").textContent = j >= 70 ? "🪨✨" : j < 15 ? "🪨💢" : "🪨";
+    $("#rockBar").style.width = j + "%";
+    $("#rockMood").textContent = j >= 70 ? "Ecstatic. He moved zero millimeters." : j >= 40 ? "Quietly pleased, we think." : j >= 15 ? "Mildly rock-like." : "Sulking dramatically.";
+  }
+
+  function rockAct(k) {
+    var lines = ROCK_SAY[k];
+    rock.joy = Math.max(0, Math.min(100, rock.joy + ROCK_JOY[k] + Math.floor(Math.random() * 7) - 3));
+    state.rockPets++;
+    addXp(2);
+    if (state.rockPets % 10 === 0) { addCoins(1); }
+    var f = $("#rockFace");
+    f.classList.remove("wiggle");
+    void f.offsetWidth;
+    f.classList.add("wiggle");
+    say(lines[Math.floor(Math.random() * lines.length)], k === "ignore" ? "bad" : "good");
+    rockRender();
+  }
+
+  /* ---------- cursed pizza ---------- */
+  var TOP = [
+    { n: "Pineapple", e: "🍍", c: 12, r: "Italy just felt a disturbance." },
+    { n: "Anchovies", e: "🐟", c: 10, r: "The fish did not consent." },
+    { n: "Gummy bears", e: "🧸", c: 16, r: "They look very nervous." },
+    { n: "Old socks", e: "🧦", c: 25, r: "Smells like confidence." },
+    { n: "Glitter", e: "✨", c: 8, r: "Now it is fancy." },
+    { n: "Cereal", e: "🥣", c: 14, r: "Breakfast and dinner, united at last." },
+    { n: "Rubber duck", e: "🦆", c: 22, r: "It squeaks when sliced." },
+    { n: "Ketchup swirl", e: "🍅", c: 7, r: "A crime, but a tidy one." },
+    { n: "Spaghetti", e: "🍝", c: 9, r: "Pizza inception." },
+    { n: "Mystery meat", e: "🍖", c: 18, r: "Nobody asked. Nobody knows." }
+  ];
+  var pz = { chaos: 0, pie: "", done: false };
+
+  function pzRender() {
+    var t = $("#pzTops");
+    if (!t.children.length) {
+      TOP.forEach(function (o, i) {
+        var b = document.createElement("button");
+        b.className = "btn small";
+        b.setAttribute("data-action", "pz-add");
+        b.setAttribute("data-t", i);
+        b.textContent = o.e + " " + o.n;
+        t.appendChild(b);
+      });
+    }
+    $("#pzPie").textContent = "🍕" + pz.pie;
+    $("#pzBar").style.width = Math.min(100, pz.chaos) + "%";
+  }
+
+  function pzAdd(i) {
+    if (pz.done) { say("That pizza is finished. Press New pizza.", "info"); return; }
+    var o = TOP[i];
+    pz.chaos += o.c;
+    pz.pie += o.e;
+    beep(200 + pz.chaos * 4, 0.07);
+    if (pz.chaos > 100) {
+      pz.done = true;
+      $("#pzStatus").textContent = "BOOM! The pizza exploded at " + pz.chaos + " chaos.";
+      say("BOOM! Too cursed. The oven is gone.", "bad");
+      jingle("lose");
+    } else {
+      $("#pzStatus").textContent = "Chaos " + pz.chaos + ". " + o.r;
+      say(o.n + ": " + o.r);
+    }
+    pzRender();
+  }
+
+  function pzServe() {
+    if (pz.done) { say("Already served or exploded. Press New pizza.", "info"); return; }
+    if (pz.chaos === 0) { say("You served an empty plate. Bold, but no.", "bad"); return; }
+    pz.done = true;
+    var msg;
+    if (pz.chaos >= 70) {
+      state.pizzaWins++;
+      addXp(35);
+      addCoins(5);
+      msg = "Perfectly cursed! The customer cried, then asked for seconds.";
+      jingle("win");
+    } else if (pz.chaos >= 40) {
+      addXp(12);
+      addCoins(1);
+      msg = "Pretty weird. The customer ate it and avoided eye contact.";
+    } else {
+      addXp(5);
+      msg = "Too normal. The customer asked if this was just bread.";
+    }
+    $("#pzStatus").textContent = msg;
+    say(msg, pz.chaos >= 70 ? "good" : "info");
+  }
+
+  function pzNew() {
+    pz = { chaos: 0, pie: "", done: false };
+    $("#pzStatus").textContent = "Chaos 0. Add a topping.";
+    pzRender();
+    say("Fresh dough. Fresh bad ideas.", "info");
+  }
+
+  /* ---------- arabic ---------- */
+  var AR = {
+    "Pixel Playground": "ملعب البكسل",
+    "Twelve mini games. Every button talks back.": "اثنتا عشرة لعبة صغيرة. كل زر يردّ عليك.",
+    "Level": "المستوى", "XP": "الخبرة", "Coins": "العملات", "Clicks": "النقرات",
+    "Home": "الرئيسية", "Tic-tac-toe": "إكس أو", "Memory": "الذاكرة", "Click frenzy": "جنون النقر",
+    "Number guess": "خمّن الرقم", "Rock paper scissors": "حجر ورقة مقص", "Lucky dice": "النرد الحظّي",
+    "Whack-a-mole": "اضرب الخلد", "Simon says": "سيمون يقول", "Reaction test": "اختبار ردّ الفعل",
+    "Runaway button": "الزر الهارب", "Pet rock": "الصخرة الأليفة", "Cursed pizza": "البيتزا الملعونة",
+    "Settings": "الإعدادات", "Badges": "الشارات",
+    "Press anything.": "اضغط على أي شيء.", "Something happens.": "سيحدث شيء ما.",
+    "Pick a game, earn XP and coins, and unlock badges. Not sure where to start? Let the arcade choose.": "اختر لعبة، اجمع الخبرة والعملات، وافتح الشارات. لا تعرف من أين تبدأ؟ دع الصالة تختار لك.",
+    "Surprise me": "فاجئني", "Gamer fact": "معلومة للاعبين", "Claim daily bonus": "خذ مكافأة اليوم",
+    "Play": "العب", "Rules": "القواعد", "Got it": "فهمت", "Start": "ابدأ", "Reset": "إعادة",
+    "Beat the bot on easy, or try to survive hard mode.": "اهزم الروبوت في الوضع السهل، أو حاول النجاة في الصعب.",
+    "Match eight pairs in as few moves as you can.": "طابق ثمانية أزواج بأقل عدد من الحركات.",
+    "Ten seconds. How many clicks can you land?": "عشر ثوانٍ. كم نقرة تستطيع؟",
+    "Find the secret number between 1 and 100.": "اعثر على الرقم السري بين 1 و100.",
+    "Classic duel. Chase a three win streak.": "مبارزة كلاسيكية. حاول الفوز ثلاث مرات متتالية.",
+    "Roll two dice and chase doubles for bonus coins.": "ارمِ نردين وطارد الأزواج لتحصل على عملات إضافية.",
+    "Hit every mole that pops up in 20 seconds.": "اضرب كل خلد يظهر خلال 20 ثانية.",
+    "Watch the colors and repeat the growing sequence.": "راقب الألوان وكرّر التسلسل المتزايد.",
+    "Click the instant the box turns green.": "انقر لحظة يتحول المربع إلى الأخضر.",
+    "A very dramatic button refuses to be clicked. Catch it anyway.": "زر درامي يرفض أن يُنقر عليه. أمسك به رغم ذلك.",
+    "Adopt a rock. Pet it, sing to it, ignore it. It has opinions.": "تبنَّ صخرة. داعبها، غنِّ لها، تجاهلها. لها آراؤها.",
+    "Pile on terrible toppings. Aim for perfectly cursed without exploding.": "كدّس إضافات فظيعة. استهدف اللعنة المثالية دون أن تنفجر.",
+    "You are X. The bot is O.": "أنت X والروبوت O.", "Easy bot": "روبوت سهل", "Hard bot": "روبوت صعب", "New round": "جولة جديدة",
+    "Your move.": "دورك.", "You win!": "فزت!", "The bot wins this one.": "الروبوت يفوز هذه المرة.", "It is a draw.": "تعادل.",
+    "Wins": "الفوز", "Draws": "التعادل", "Losses": "الخسارة", "Ties": "التعادل", "Streak": "التتابع",
+    "Flip two cards. Matching pairs stay open.": "اقلب بطاقتين. الأزواج المتطابقة تبقى مفتوحة.",
+    "Shuffle": "اخلط", "Peek (3 coins)": "نظرة (3 عملات)", "Moves": "الحركات", "Pairs": "الأزواج", "Best": "الأفضل",
+    "Flip a card to begin.": "اقلب بطاقة للبدء.",
+    "Press start, then click as fast as you can for ten seconds.": "اضغط ابدأ ثم انقر بأسرع ما تستطيع لمدة عشر ثوانٍ.",
+    "Ready when you are.": "جاهز متى شئت.", "CLICK!": "انقر!", "Runs": "المحاولات", "GO!": "انطلق!",
+    "I picked a number from 1 to 100. Use the pad, then press Guess.": "اخترت رقمًا من 1 إلى 100. استخدم اللوحة ثم اضغط خمّن.",
+    "Clear": "مسح", "Undo": "تراجع", "Guess": "خمّن", "Hint (2 coins)": "تلميح (عملتان)", "New number": "رقم جديد",
+    "Waiting for your first guess.": "بانتظار تخمينك الأول.", "Tries": "المحاولات",
+    "Choose your weapon. Three wins in a row unlocks a badge.": "اختر سلاحك. ثلاث انتصارات متتالية تفتح شارة.",
+    "Make your pick.": "اختر الآن.", "Reset score": "صفّر النتيجة",
+    "Doubles pay coins. A snake eyes roll pays big.": "الأزواج تمنحك عملات، وعينا الأفعى تمنحك الكثير.",
+    "Roll to begin.": "ارمِ النرد للبدء.", "Roll": "ارمِ", "Rolls": "الرميات", "Doubles": "الأزواج", "Biggest": "الأكبر",
+    "Snake eyes! +10 coins.": "عينا الأفعى! +10 عملات.",
+    "Moles pop up for a split second. Hit them fast.": "تظهر الخلدان للحظة. اضربها بسرعة.",
+    "Score": "النقاط", "Time": "الوقت", "Press Start.": "اضغط ابدأ.", "Press Start first.": "اضغط ابدأ أولًا.",
+    "Repeat the pattern. It gets one step longer each round.": "كرّر النمط. يطول خطوة في كل جولة.",
+    "Round": "الجولة", "Watch closely...": "راقب جيدًا...", "Your turn.": "دورك الآن.",
+    "Click the box to arm it. When it turns green, click again as fast as you can.": "انقر على المربع لتفعيله. عندما يصبح أخضر انقر مجددًا بأسرع ما تستطيع.",
+    "Click to start": "انقر للبدء", "Wait for green...": "انتظر اللون الأخضر...", "CLICK NOW!": "انقر الآن!",
+    "Too soon! Click to try again": "مبكر جدًا! انقر للمحاولة مجددًا", "Last": "الأخير",
+    "This button has trust issues. Catch it before 15 seconds run out.": "هذا الزر لا يثق بأحد. أمسك به قبل مرور 15 ثانية.",
+    "Catch me": "أمسك بي", "Caught": "الإمساك", "Press Start, if you dare.": "اضغط ابدأ إن تجرأت.", "Catch it!": "أمسك به!",
+    "Meet Rocky. Keep him happy. Nobody can tell if it works.": "تعرّف على روكي. أسعده. لا أحد يعرف إن كان ينجح.",
+    "Pet": "داعب", "Feed a pebble": "أطعمه حصاة", "Go for a walk": "تمشَّ معه", "Sing": "غنِّ", "Tiny hat": "قبعة صغيرة", "Ignore": "تجاهل",
+    "Moments shared": "اللحظات المشتركة", "Mildly rock-like.": "يشبه الصخرة قليلًا.", "Quietly pleased, we think.": "سعيد بهدوء على ما يبدو.",
+    "Ecstatic. He moved zero millimeters.": "في قمة السعادة. لم يتحرك مليمترًا.", "Sulking dramatically.": "متجهّم بدراما.",
+    "Reach 70 to 100 chaos for a perfectly cursed pizza. Go past 100 and it explodes.": "اجمع من 70 إلى 100 فوضى لبيتزا ملعونة تمامًا. تجاوز 100 وستنفجر.",
+    "Chaos 0. Add a topping.": "الفوضى 0. أضف إضافة.", "Serve it": "قدّمها", "New pizza": "بيتزا جديدة",
+    "Cursed pizzas served": "بيتزا ملعونة قُدّمت", "Fresh dough. Fresh bad ideas.": "عجين جديد. أفكار سيئة جديدة.",
+    "Tune the arcade to your taste.": "اضبط الصالة على ذوقك.", "Switch theme": "بدّل السمة", "Copy my stats": "انسخ إحصائياتي",
+    "Erase all progress": "امسح كل التقدم", "Click feed": "سجل النقرات", "Hide": "إخفاء", "Show": "إظهار",
+    "Back to top": "إلى الأعلى", "Pixel Playground keeps your progress in this browser only.": "يحفظ ملعب البكسل تقدّمك في هذا المتصفح فقط.",
+    "Welcome to Pixel Playground. Press any button.": "أهلًا بك في ملعب البكسل. اضغط أي زر.",
+    "First click": "أول نقرة", "Warming up": "الإحماء", "Century": "المئوية", "Three in a row": "ثلاثة متتالية",
+    "Elephant mind": "ذاكرة الفيل", "Finger storm": "عاصفة الأصابع", "Sharp shooter": "قنّاص ماهر", "On a roll": "في أوج الحماس",
+    "Lucky seven": "الرقم المحظوظ", "Mole master": "سيد الخلد", "Sharp ears": "أذن حادّة", "Lightning reflexes": "ردود فعل البرق",
+    "Coward catcher": "صائد الجبان", "Rock whisperer": "همّاس الصخور", "Chaos chef": "طاهي الفوضى", "Pocket change": "فكّة الجيب",
+    "Press any button": "اضغط أي زر", "Reach 10 clicks": "اصل إلى 10 نقرات", "Reach 100 clicks": "اصل إلى 100 نقرة",
+    "Beat the bot": "اهزم الروبوت", "Clear the memory board": "أنهِ لوحة الذاكرة", "Land 50 frenzy clicks": "سجّل 50 نقرة في الجنون",
+    "Guess in 7 tries or fewer": "خمّن في 7 محاولات أو أقل", "Win three duels in a row": "اربح ثلاث مبارزات متتالية",
+    "Roll a total of 12": "احصل على مجموع 12", "Whack 15 moles in one round": "اضرب 15 خلدًا في جولة",
+    "Reach round 6 in Simon says": "اصل إلى الجولة 6 في سيمون", "React in under 300 ms": "استجب في أقل من 300 مللي ثانية",
+    "Catch the button 8 times": "أمسك الزر 8 مرات", "Share 20 moments with Rocky": "شارك 20 لحظة مع روكي",
+    "Serve a perfectly cursed pizza": "قدّم بيتزا ملعونة تمامًا", "Hold 25 coins": "امتلك 25 عملة"
+  };
+  function L(s) { return AR[s] !== undefined ? AR[s] : s; }
+  var AR_RX = [
+    [/^Level (\d+) of (\d+): (\d+) holes, goal (\d+) moles\.$/, function (m, a, b, c, d) { return "المستوى " + a + " من " + b + ": " + c + " حفرة، الهدف " + d + " خلد."; }],
+    [/^Level (\d+) of (\d+): (\d+) pads, reach round (\d+)\.$/, function (m, a, b, c, d) { return "المستوى " + a + " من " + b + ": " + c + " أزرار، الوصول للجولة " + d + "."; }],
+    [/^Lv (\d+)$/, function (m, a) { return "مستوى " + a; }],
+    [/^(\d+) of (\d+) unlocked$/, function (m, a, b) { return a + " من " + b + " مفتوحة"; }],
+    [/^Sound: (on|off)$/, function (m, a) { return "الصوت: " + (a === "on" ? "يعمل" : "مغلق"); }],
+    [/^Opened (.+)\.$/, function (m, a) { return "فتحتَ: " + a; }],
+    [/^You rolled (\d+)\.$/, function (m, a) { return "رميتَ " + a + "."; }],
+    [/^Doubles of (\d)! \+3 coins\.$/, function (m, a) { return "زوجان من " + a + "! +3 عملات."; }],
+    [/^Level up! You reached level (\d+)\.$/, function (m, a) { return "ارتقيت! وصلت إلى المستوى " + a + "."; }],
+    [/^Badge unlocked: (.+) \(\+5 coins\)$/, function (m, a) { return "شارة جديدة: " + L(a) + " (+5 عملات)"; }],
+    [/^Level (\d+) started\. Goal: (\d+) moles\.$/, function (m, a, b) { return "بدأ المستوى " + a + ". الهدف: " + b + " خلد."; }],
+    [/^Theme: (light|dark)\.$/, function (m, a) { return "السمة: " + (a === "dark" ? "داكنة" : "فاتحة"); }]
+  ];
+  var arOrig = new WeakMap();
+
+  function trText(n) {
+    var p = n.parentNode;
+    if (!p || (p.closest && p.closest("[data-notr]"))) { return; }
+    var raw = n.nodeValue;
+    var t = raw.trim();
+    if (!t) { return; }
+    var out = AR[t];
+    if (out === undefined) {
+      for (var i = 0; i < AR_RX.length; i++) {
+        if (AR_RX[i][0].test(t)) { out = t.replace(AR_RX[i][0], AR_RX[i][1]); break; }
+      }
+    }
+    if (out !== undefined) {
+      arOrig.set(n, raw);
+      n.nodeValue = raw.replace(t, function () { return out; });
+    }
+  }
+
+  function walkText(root, fn) {
+    var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    var list = [];
+    while (w.nextNode()) { list.push(w.currentNode); }
+    list.forEach(fn);
+  }
+
+  var arObserver = new MutationObserver(function (muts) {
+    if (state.lang !== "ar") { return; }
+    muts.forEach(function (m) {
+      if (m.type === "characterData") { trText(m.target); }
+      m.addedNodes.forEach(function (n) {
+        if (n.nodeType === 3) { trText(n); }
+        else if (n.nodeType === 1) { walkText(n, trText); }
+      });
+    });
+  });
+
+  function applyLang() {
+    var ar = state.lang === "ar";
+    var root = document.documentElement;
+    root.lang = ar ? "ar" : "en";
+    root.dir = ar ? "rtl" : "ltr";
+    document.title = ar ? "ملعب البكسل" : "Pixel Playground";
+    $("#btnLang").textContent = ar ? "English" : "العربية";
+    if (ar) {
+      walkText(document.body, trText);
+    } else {
+      walkText(document.body, function (n) {
+        if (arOrig.has(n)) { n.nodeValue = arOrig.get(n); arOrig.delete(n); }
+      });
+    }
+  }
+
+  /* ---------- misc ---------- */
+  var facts = [
+    "Pong, released in 1972, was one of the first commercially successful arcade games.",
+    "The Konami code works in many games and some websites too.",
+    "Tic-tac-toe is a solved game: perfect play always ends in a draw.",
+    "Speedrunners shave seconds by finding glitches developers never intended.",
+    "The first video game Easter egg appeared in Adventure for the Atari 2600.",
+    "A typical person blinks while gaming far less than usual. Remember to rest your eyes."
+  ];
+
+  function surprise() {
+    var views = ["ttt", "mem", "frenzy", "guess", "rps", "dice", "whack", "simon", "react", "runaway", "rock", "pizza"];
+    var v = views[Math.floor(Math.random() * views.length)];
+    nav(v);
+    say("The arcade picked: " + v + ". Good luck!", "info");
+  }
+
+  function bonus() {
+    var today = new Date().toDateString();
+    if (state.bonusDay === today) {
+      say("Daily bonus already claimed. Come back tomorrow.", "bad");
+      return;
+    }
+    state.bonusDay = today;
+    addCoins(10);
+    addXp(20);
+    say("Daily bonus: +10 coins and +20 XP!", "good");
+    jingle("win");
+  }
+
+  function resetAll() {
+    if (!window.confirmReset) {
+      window.confirmReset = true;
+      say("Press Erase again within 4 seconds to confirm.", "bad");
+      setTimeout(function () { window.confirmReset = false; }, 4000);
+      return;
+    }
+    window.confirmReset = false;
+    try { localStorage.removeItem(KEY); } catch (e) {}
+    state.xp = 0; state.coins = 0; state.clicks = 0;
+    state.ttt = { w: 0, d: 0, l: 0 };
+    state.memBest = 0; state.frBest = 0; state.frRuns = 0; state.gsBest = 0;
+    state.rps = { w: 0, t: 0, l: 0, best: 0 };
+    state.dice = { rolls: 0, doubles: 0, max: 0 };
+    state.ach = {};
+    state.whackBest = 0; state.simonBest = 0; state.reactBest = 0;
+    state.whackLvl = 1; state.simonLvl = 1; wh.lvl = 1; si.lvl = 1;
+    state.runBest = 0; state.rockPets = 0; state.pizzaWins = 0;
+    whRender(); siBuild(); siInfo();
+    state.bonusDay = "";
+    say("Progress erased. Fresh start!", "info");
+  }
+
+  function setTheme() {
+    var root = document.documentElement;
+    var cur = root.getAttribute("data-theme");
+    if (!cur) {
+      cur = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    var next = cur === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    try { localStorage.setItem(KEY + "-theme", next); } catch (e) {}
+    say("Theme: " + next + ".", "info");
+  }
+
+  function copyStats() {
+    var text = "Pixel Playground: level " + level() + ", " + state.xp + " XP, " + state.coins + " coins, " + state.clicks + " clicks.";
+    try {
+      navigator.clipboard.writeText(text).then(function () {
+        say("Stats copied to your clipboard.", "good");
+      }, function () {
+        say("Clipboard blocked. Stats: " + text, "info");
+      });
+    } catch (e) {
+      say("Clipboard unavailable. Stats: " + text, "info");
+    }
+  }
+
+  /* ---------- action table ---------- */
+  var actions = {
+    "nav": function (b) { nav(b.getAttribute("data-view")); say("Opened " + b.textContent.trim() + "."); },
+    "surprise": surprise,
+    "fact": function () { say(facts[Math.floor(Math.random() * facts.length)], "info"); addXp(1); },
+    "bonus": bonus,
+    "help": function (b) { openModal(b.getAttribute("data-game")); say("Showing rules."); },
+    "modal-close": function () { $("#modal").hidden = true; say("Rules closed."); },
+    "ttt-cell": function (b) { tttPlay(parseInt(b.getAttribute("data-i"), 10)); },
+    "ttt-new": function () { tttNew(); say("New round. You are X.", "info"); },
+    "ttt-easy": function () {
+      ttt.hard = false;
+      $("#btnEasy").classList.add("on");
+      $("#btnHard").classList.remove("on");
+      tttNew();
+      say("Easy bot selected.", "info");
+    },
+    "ttt-hard": function () {
+      ttt.hard = true;
+      $("#btnHard").classList.add("on");
+      $("#btnEasy").classList.remove("on");
+      tttNew();
+      say("Hard bot selected. Good luck.", "bad");
+    },
+    "mem-flip": function (b) { memFlip(parseInt(b.getAttribute("data-i"), 10)); },
+    "mem-new": function () { memNew(); say("Cards shuffled.", "info"); },
+    "mem-peek": memPeek,
+    "fr-start": frStart,
+    "fr-click": frClick,
+    "fr-reset": frReset,
+    "gs-pad": function (b) { gsPad(b.getAttribute("data-key")); },
+    "gs-guess": gsGuess,
+    "gs-hint": gsHint,
+    "gs-new": function () { gsNew(); say("A fresh secret number is ready.", "info"); },
+    "rps-pick": function (b) { rpsPick(b.getAttribute("data-pick")); },
+    "rps-reset": function () {
+      state.rps = { w: 0, t: 0, l: 0, best: state.rps.best };
+      rpsStreak = 0;
+      $("#rpsS").textContent = "0";
+      $("#rpsYou").textContent = "❔";
+      $("#rpsBot").textContent = "❔";
+      $("#rpsStatus").textContent = "Make your pick.";
+      say("Duel score reset.", "info");
+    },
+    "wh-start": whStart,
+    "wh-level": function (b) { whSetLevel(parseInt(b.getAttribute("data-l"), 10)); },
+    "si-level": function (b) { siSetLevel(parseInt(b.getAttribute("data-l"), 10)); },
+    "wh-hit": function (b) { whHit(parseInt(b.getAttribute("data-i"), 10)); },
+    "si-start": siStart,
+    "si-pad": function (b) { siPress(parseInt(b.getAttribute("data-c"), 10)); },
+    "re-area": reArea,
+    "rb-start": rbStart,
+    "rb-catch": rbCatch,
+    "lang": function () {
+      state.lang = state.lang === "ar" ? "en" : "ar";
+      applyLang();
+      say(state.lang === "ar" ? "تم التبديل إلى العربية." : "Switched to English.", "info");
+    },
+    "rock-act": function (b) { rockAct(b.getAttribute("data-k")); },
+    "pz-add": function (b) { pzAdd(parseInt(b.getAttribute("data-t"), 10)); },
+    "pz-serve": pzServe,
+    "pz-new": pzNew,
+    "dice-roll": diceRoll,
+    "dice-reset": diceReset,
+    "set-sound": function () {
+      state.sound = !state.sound;
+      say("Sound " + (state.sound ? "on." : "off."), "info");
+    },
+    "set-theme": setTheme,
+    "set-reset": resetAll,
+    "copy-score": copyStats,
+    "feed-toggle": function (b) {
+      var l = $("#feedList");
+      l.classList.toggle("collapsed");
+      b.textContent = l.classList.contains("collapsed") ? "Show" : "Hide";
+      toast("Feed " + (l.classList.contains("collapsed") ? "hidden." : "visible."), "info");
+    },
+    "feed-clear": function () {
+      $("#feedList").innerHTML = "";
+      toast("Feed cleared.", "info");
+    },
+    "top": function () {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      say("Back at the top.");
+    }
+  };
+
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest("button");
+    if (!b) { return; }
+    state.clicks++;
+    ripple(b, e);
+    beep(360, 0.04);
+    var name = b.getAttribute("data-action");
+    var fn = actions[name];
+    if (fn) {
+      fn(b, e);
+    } else {
+      say("Button pressed: " + b.textContent.trim(), "info");
+    }
+    refresh();
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && !$("#modal").hidden) {
+      $("#modal").hidden = true;
+      say("Rules closed.");
+    }
+  });
+
+  /* ---------- boot ---------- */
+  load();
+  tttNew();
+  memNew();
+  gsNew();
+  whRender();
+  renderHud();
+  wh.lvl = Math.min(state.whackLvl || 1, WH_LEVELS.length);
+  si.lvl = Math.min(state.simonLvl || 1, SI_LEVELS.length);
+  whRender();
+  siBuild();
+  siInfo();
+  rockRender();
+  pzRender();
+  $("#rbBtn").addEventListener("mouseenter", function () {
+    if (rb.run && Math.random() < Math.min(0.85, 0.4 + rb.score * 0.05)) { rbMove(); }
+  });
+  arObserver.observe(document.body, { childList: true, subtree: true, characterData: true });
+  applyLang();
+  logLine("Welcome to Pixel Playground. Press any button.");
+})();
+</script>
+</body>
+</html>
